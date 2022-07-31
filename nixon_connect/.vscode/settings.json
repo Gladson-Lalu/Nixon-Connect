@@ -1,0 +1,48 @@
+{
+    "cSpell.words": [
+        "dotenv",
+        "prefs"
+    ],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        ".flutter-plugins": true,
+        ".gitignore": true,
+        "analysis_options.yaml": true,
+        "README.md": true,
+        "build": true,
+        "ios": true,
+        "pubspec.lock": true,
+        "lib/generated_plugin_registrant.dart": true,
+        "windows": true,
+        "web": true,
+        ".metadata": true,
+        ".flutter-plugins-dependencies": true,
+        "nixon_connect.iml": true,
+        ".packages": true,
+        ".idea": true,
+        ".dart_tool": true
+    },
+    "hide-files.files": [
+        ".flutter-plugins",
+        ".gitignore",
+        "analysis_options.yaml",
+        "README.md",
+        "build",
+        "ios",
+        "pubspec.lock",
+        "lib/generated_plugin_registrant.dart",
+        "windows",
+        "web",
+        ".metadata",
+        ".flutter-plugins-dependencies",
+        "nixon_connect.iml",
+        ".packages",
+        ".idea",
+        ".dart_tool"
+    ]
+}
