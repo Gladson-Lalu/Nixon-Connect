@@ -43,7 +43,7 @@ class LogoBuild extends StatelessWidget {
                   fontSize: _fontSize, letterSpacing: 4),
             ),
             colors: logoTitleAnimationColors,
-            speed: const Duration(milliseconds: 450),
+            speed: const Duration(milliseconds: 250),
           ),
         ],
         repeatForever: false,

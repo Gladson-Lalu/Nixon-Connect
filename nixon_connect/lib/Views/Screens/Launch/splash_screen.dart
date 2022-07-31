@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nixon_connect/Views/Screens/Login/login_screen.dart';
+import 'package:nixon_connect/cubit/auth_cubit.dart';
 
+import '../ChatHome/home_screen.dart';
 import 'components/logo_component.dart';
 
 class LaunchScreen extends StatefulWidget {
@@ -16,21 +19,37 @@ class _LaunchScreenState extends State<LaunchScreen> {
     //SignInButton Animation Delay
     () async {
       Future.delayed(
-          const Duration(milliseconds: 1900),
-          () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      const LoginScreen())));
+          const Duration(milliseconds: 1800),
+          () => BlocProvider.of<AuthCubit>(context)
+              .getUser());
     }.call();
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      body: Center(
-        child: LogoBuild(
-          size: size.width,
-        ),
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is AuthSuccess) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const HomeScreen()));
+          } else {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const LoginScreen()));
+          }
+        },
+        builder: (context, state) {
+          return Center(
+            child: LogoBuild(
+              size: size.width,
+            ),
+          );
+        },
       ),
     );
   }

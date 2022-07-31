@@ -57,7 +57,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppBar() as PreferredSizeWidget,
+      appBar: homeAppBar(),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(

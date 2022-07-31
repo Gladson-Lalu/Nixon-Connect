@@ -16,7 +16,7 @@ const logoTitleAnimationColors = [
   Color(0xffF5F5F5)
 ];
 
-const kPrimaryColor = Color(0xff0C62B6);
+const kPrimaryColor = Colors.blue;
 const kBackgroundColor = Color(0xffF5F5F5);
 const kTextColor = Colors.black;
 

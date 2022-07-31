@@ -117,12 +117,12 @@ class _LoginScreenState extends State<LoginScreen> {
             BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
                 //navigate to home screen
-                if (state is AuthLoaded) {
+                if (state is AuthSuccess) {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                         builder: ((context) =>
-                            const HomePage())),
+                            const HomeScreen())),
                     ModalRoute.withName('/'),
                   );
                 }

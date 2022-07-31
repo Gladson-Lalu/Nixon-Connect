@@ -23,4 +23,15 @@ class UserModel {
       token: json['token'] ?? '',
     );
   }
+
+  //toJson
+  Map<String, String> toJson() {
+    return {
+      'userID': userID,
+      'name': name,
+      'profileUrl': profileUrl,
+      'email': email,
+      'token': token,
+    };
+  }
 }

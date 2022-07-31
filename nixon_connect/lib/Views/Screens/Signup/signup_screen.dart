@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nixon_connect/Common/constant.dart';
-import 'package:nixon_connect/Handlers/auth_cubit.dart';
 import 'package:nixon_connect/Views/Screens/Login/login_screen.dart';
 import 'package:nixon_connect/cubit/auth_cubit.dart';
 
@@ -82,12 +81,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
-                if (state is AuthLoaded) {
+                if (state is AuthSuccess) {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                         builder: ((context) =>
-                            const HomePage())),
+                            const HomeScreen())),
                     ModalRoute.withName('/'),
                   );
                 }

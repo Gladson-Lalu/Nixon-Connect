@@ -14,6 +14,20 @@ class AuthCubit extends Cubit<AuthState> {
   final AuthService _authService;
   AuthCubit(this._authService) : super(const AuthInitial());
 
+  //get the user from the local storage
+  Future<void> getUser() async {
+    final SharedPreferences prefs =
+        await SharedPreferences.getInstance();
+    final String? user = prefs.getString('user');
+    if (user != null) {
+      final json = jsonDecode(user);
+      final userModel = UserModel.fromJson(json);
+      emit(AuthSuccess(user: userModel));
+    } else {
+      emit(const AuthInitial());
+    }
+  }
+
   //sign in
   Future<void> handleSignIn(
       {required String email,
@@ -29,7 +43,7 @@ class AuthCubit extends Cubit<AuthState> {
         if (response.statusCode == 200) {
           final user = UserModel.fromJson(
               json.decode(response.body)['user']);
-          emit(AuthLoaded(user: user));
+          emit(AuthSuccess(user: user));
         } else {
           emit(const AuthError(error: ''));
           showToast(json.decode(response.body)['error']);
@@ -65,10 +79,10 @@ class AuthCubit extends Cubit<AuthState> {
         );
         if (response.statusCode == 200) {
           showToast("Registration Successful");
-          print(response.body);
           final user = UserModel.fromJson(
               json.decode(response.body)['user']);
-          emit(AuthLoaded(user: user));
+          saveUserData(user: user);
+          emit(AuthSuccess(user: user));
         } else {
           emit(const AuthError(error: ''));
           showToast(json.decode(response.body)['error']);
@@ -77,7 +91,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(const AuthError(error: ''));
       }
     } catch (error) {
-      emit(AuthError(error: error.toString()));
+      emit(const AuthError(error: ''));
     }
   }
 
@@ -95,18 +109,11 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
 //save user data to local storage
-  saveUserData(
-      {required String name,
-      required String email,
-      required String userID,
-      required String userProfileImage,
-      required String token}) async {
+  saveUserData({required UserModel user}) async {
     SharedPreferences prefs =
         await SharedPreferences.getInstance();
-    prefs.setString('name', name);
-    prefs.setString('email', email);
-    prefs.setString('userID', userID);
-    prefs.setString('token', token);
+    prefs.setString(
+        'current-user', user.toJson().toString());
   }
 
 //Show toast message

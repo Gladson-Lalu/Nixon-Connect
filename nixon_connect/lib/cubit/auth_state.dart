@@ -22,9 +22,9 @@ class AuthLoading extends AuthState {
 }
 
 //Loaded state
-class AuthLoaded extends AuthState {
+class AuthSuccess extends AuthState {
   final UserModel user;
-  const AuthLoaded({required this.user});
+  const AuthSuccess({required this.user});
 
   @override
   String toString() => 'AuthLoaded';
@@ -32,7 +32,7 @@ class AuthLoaded extends AuthState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AuthLoaded &&
+      other is AuthSuccess &&
           runtimeType == other.runtimeType &&
           user == other.user;
 
