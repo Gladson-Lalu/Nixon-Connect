@@ -19,6 +19,7 @@ const logoTitleAnimationColors = [
 const kPrimaryColor = Colors.blue;
 const kBackgroundColor = Color(0xffF5F5F5);
 const kTextColor = Colors.black;
+const kDrawerColor = Color(0xff050003);
 
 TextStyle textStyle = GoogleFonts.notoSerif(
     textStyle: const TextStyle(

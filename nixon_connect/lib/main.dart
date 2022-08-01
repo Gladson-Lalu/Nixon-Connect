@@ -5,6 +5,7 @@ import 'package:nixon_connect/Services/auth_service.dart';
 import 'package:nixon_connect/cubit/auth_cubit.dart';
 
 import 'Common/theme.dart';
+import 'Views/Screens/IndividualChat/conversations_screen.dart';
 import 'Views/Screens/Launch/splash_screen.dart';
 
 Future main() async {
@@ -23,7 +24,7 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: primaryTheme(),
         title: 'Nixon Connect',
-        home: const LaunchScreen(),
+        home: const ConversationScreen(),
       ),
     );
   }

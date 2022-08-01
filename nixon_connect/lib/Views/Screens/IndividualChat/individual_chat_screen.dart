@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:nixon_connect/Common/constant.dart';
 import 'package:nixon_connect/Models/chat_message_model.dart';
 
 class ChatDetailPage extends StatefulWidget {
@@ -31,62 +33,44 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.black,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        ),
         elevation: 0,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
+        backgroundColor: kBackgroundColor,
         flexibleSpace: SafeArea(
           child: Container(
             padding: const EdgeInsets.only(right: 16),
             child: Row(
               children: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                  ),
+                const SizedBox(
+                  width: 14,
                 ),
-                SizedBox(
-                  width: 2,
-                ),
-                CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "<https://randomuser.me/api/portraits/men/5.jpg>"),
-                  maxRadius: 20,
-                ),
-                SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                    mainAxisAlignment:
-                        MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "GLADSON",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(
-                        height: 6,
-                      ),
-                      Text(
-                        "Online",
-                        style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 13),
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(
-                  Icons.settings,
-                  color: Colors.black54,
+                Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  mainAxisAlignment:
+                      MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(
+                      "GLADSON",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    Text(
+                      "Online",
+                      style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 13),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -98,11 +82,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           ListView.builder(
             itemCount: messages.length,
             shrinkWrap: true,
-            padding: EdgeInsets.only(top: 10, bottom: 10),
-            physics: NeverScrollableScrollPhysics(),
+            padding:
+                const EdgeInsets.only(top: 10, bottom: 10),
+            physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return Container(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                     left: 14,
                     right: 14,
                     top: 10,
@@ -121,10 +106,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                           ? Colors.grey.shade200
                           : Colors.blue[200]),
                     ),
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     child: Text(
                       messages[index].messageContent,
-                      style: TextStyle(fontSize: 15),
+                      style: const TextStyle(fontSize: 15),
                     ),
                   ),
                 ),
@@ -134,7 +119,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                   left: 10, bottom: 10, top: 10),
               height: 60,
               width: double.infinity,
@@ -151,17 +136,17 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         borderRadius:
                             BorderRadius.circular(30),
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.add,
                         color: Colors.white,
                         size: 20,
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 15,
                   ),
-                  Expanded(
+                  const Expanded(
                     child: TextField(
                       decoration: InputDecoration(
                           hintText: "Write message...",
@@ -170,12 +155,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                           border: InputBorder.none),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 15,
                   ),
                   FloatingActionButton(
                     onPressed: () {},
-                    child: Icon(
+                    child: const Icon(
                       Icons.send,
                       color: Colors.white,
                       size: 18,
