@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nixon_connect/Common/constant.dart';
-import 'package:nixon_connect/Views/Screens/IndividualChat/individual_chat_screen.dart';
+import 'package:nixon_connect/Views/Screens/IndividualChat/components/individual_chat_screen.dart';
 
 import '../../../Models/conversation_drawer_menu.dart';
 
@@ -21,7 +21,10 @@ class _ConversationScreenState
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Row(children: [
-          isExpanded ? blackIconTiles() : blackIconMenu(),
+          SafeArea(
+              child: isExpanded
+                  ? blackIconTiles()
+                  : blackIconMenu()),
           const Expanded(child: ChatDetailPage())
         ]));
   }
@@ -73,14 +76,10 @@ class _ConversationScreenState
   }
 
   Widget controlTile() {
-    return SafeArea(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: ListTile(
-        leading: const CircleAvatar(
-          backgroundImage: NetworkImage(
-              "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80"),
-          backgroundColor: Colors.white,
-          radius: 30,
-        ),
+        leading: buildCircleAvatar(),
         title: const Text("Room Name",
             style: TextStyle(
               fontSize: 20,
@@ -92,9 +91,17 @@ class _ConversationScreenState
     );
   }
 
+  buildCircleAvatar() {
+    return const CircleAvatar(
+      backgroundImage: NetworkImage(
+          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80"),
+      backgroundColor: Colors.white,
+      radius: 30,
+    );
+  }
+
   Widget blackIconMenu() {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
+    return Container(
       width: 80,
       color: kDrawerColor,
       child: Column(
@@ -132,42 +139,12 @@ class _ConversationScreenState
     );
   }
 
-  Widget invisibleSubMenus() {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
-      width: isExpanded ? 0 : 125,
-      child: Column(
-        children: [
-          Container(height: 95),
-          Expanded(
-            child: ListView.builder(
-                itemCount: cdms.length,
-                itemBuilder: (context, index) {
-                  DrawerMenu cmd = cdms[index];
-                  bool selected = selectedIndex == index;
-                  bool isValidSubMenu =
-                      selected && cmd.submenus.isNotEmpty;
-                  return subMenuWidget(
-                      [cmd.title, ...cmd.submenus],
-                      isValidSubMenu);
-                }),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget controlButton() {
-    return SafeArea(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: InkWell(
-        onTap: expandOrShrinkDrawer,
-        child: const CircleAvatar(
-          backgroundImage: NetworkImage(
-              "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80"),
-          backgroundColor: Colors.white,
-          radius: 30,
-        ),
-      ),
+          onTap: expandOrShrinkDrawer,
+          child: buildCircleAvatar()),
     );
   }
 

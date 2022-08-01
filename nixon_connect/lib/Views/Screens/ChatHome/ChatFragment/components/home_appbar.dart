@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nixon_connect/Common/constant.dart';
 
 AppBar homeAppBar() {
   return AppBar(

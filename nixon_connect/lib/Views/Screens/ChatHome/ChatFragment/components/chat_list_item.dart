@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nixon_connect/Views/Screens/IndividualChat/individual_chat_screen.dart';
+import 'package:nixon_connect/Views/Screens/IndividualChat/conversations_screen.dart';
 
 class ChatListItem extends StatelessWidget {
   final String name;
@@ -22,7 +22,7 @@ class ChatListItem extends StatelessWidget {
       onTap: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-          return const ChatDetailPage();
+          return const ConversationScreen();
         }));
       },
       child: Container(
@@ -49,7 +49,8 @@ class ChatListItem extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             name,
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(
+                                fontSize: 16),
                           ),
                           const SizedBox(
                             height: 6,
