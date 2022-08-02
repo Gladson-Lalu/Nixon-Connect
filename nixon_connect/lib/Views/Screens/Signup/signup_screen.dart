@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nixon_connect/Common/constant.dart';
+import 'package:nixon_connect/Cubit/auth/auth_cubit.dart';
 import 'package:nixon_connect/Views/Screens/Login/login_screen.dart';
-import 'package:nixon_connect/cubit/auth_cubit.dart';
 
 import '../../components/already_have_an_account_check.dart';
 import '../../components/rounded_button.dart';
@@ -57,6 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               },
             ),
             RoundedInputField(
+              textInputType: TextInputType.emailAddress,
               hintText: "Your Email",
               onChanged: (value) {
                 setState(() {

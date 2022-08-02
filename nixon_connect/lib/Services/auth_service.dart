@@ -6,19 +6,14 @@ import 'package:http/http.dart' as http;
 class AuthService {
   static final String? apiURI = dotenv.env['API_URI'];
 
-//authentication Uri
-  final Uri loginURI = Uri.parse(apiURI! + 'auth/login');
-  final Uri registerURI =
-      Uri.parse(apiURI! + 'auth/register');
-  final Uri forgotPasswordURI =
-      Uri.parse(apiURI! + '/auth/forgot-password');
-
 //SignIn method to get token
   Future<http.Response> signIn(
       {required String email,
       required String password}) async {
+    http.Response res =
+        await http.get(Uri.parse(apiURI! + 'auth/logout'));
     final response = await http.post(
-      loginURI,
+      Uri.parse(apiURI! + 'auth/login'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -37,7 +32,7 @@ class AuthService {
       required String userID,
       required String password}) async {
     final response = await http.post(
-      registerURI,
+      Uri.parse(apiURI! + 'auth/register'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -54,7 +49,7 @@ class AuthService {
 //forgotPassword method
   Future<http.Response> forgotPassword(String email) async {
     final response = await http.post(
-      forgotPasswordURI,
+      Uri.parse(apiURI! + 'auth/forgot-password'),
       headers: {
         'Content-Type': 'application/json',
       },

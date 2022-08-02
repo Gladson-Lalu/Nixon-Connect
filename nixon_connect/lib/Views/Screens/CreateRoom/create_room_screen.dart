@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nixon_connect/Common/constant.dart';
+import 'package:nixon_connect/Cubit/auth/auth_cubit.dart';
+import 'package:nixon_connect/Cubit/create_room/create_room_cubit.dart';
+import 'package:nixon_connect/Models/user_model.dart';
+import 'package:nixon_connect/Views/Screens/IndividualChat/conversations_screen.dart';
+import 'package:nixon_connect/Views/Screens/Login/login_screen.dart';
 import 'package:nixon_connect/Views/components/rounded_button.dart';
 import 'package:nixon_connect/Views/components/rounded_input_field.dart';
 import 'package:nixon_connect/Views/components/rounded_password_field.dart';
@@ -20,15 +26,17 @@ class _CreateRoomState extends State<CreateRoom> {
     'Friendzone'
   ];
   String? _chosenValue;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  String _roomName = '';
+  String _roomDescription = '';
+  String _roomPassword = '';
+  String _roomPerimeter = '';
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final Size _size = MediaQuery.of(context).size;
+    final UserModel? _user =
+        BlocProvider.of<AuthCubit>(context).user;
+
     return Scaffold(
         backgroundColor: kBackgroundColor,
         appBar: AppBar(
@@ -53,7 +61,7 @@ class _CreateRoomState extends State<CreateRoom> {
                 crossAxisAlignment:
                     CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: size.height * 0.05),
+                  SizedBox(height: _size.height * 0.05),
                   RoundedInputField(
                       hintText: "Room Name",
                       icon: Icons.group,
@@ -63,7 +71,7 @@ class _CreateRoomState extends State<CreateRoom> {
                       children: [
                         const Icon(Icons.filter_list,
                             color: kPrimaryColor),
-                        SizedBox(width: size.width * 0.04),
+                        SizedBox(width: _size.width * 0.04),
                         Expanded(
                           child:
                               DropdownButtonHideUnderline(
@@ -79,12 +87,14 @@ class _CreateRoomState extends State<CreateRoom> {
                       : const SizedBox(),
                   RoundedInputField(
                       hintText: "Room Perimeter",
+                      textInputType: TextInputType.number,
                       onChanged: onChangedRoomPerimeter),
-                  const TextFieldContainer(
+                  TextFieldContainer(
                     child: TextField(
+                      onChanged: onChangedRoomDescription,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Room Description",
                         border: InputBorder.none,
                         icon: Icon(Icons.description,
@@ -92,10 +102,62 @@ class _CreateRoomState extends State<CreateRoom> {
                       ),
                     ),
                   ),
-                  RoundedButton(
-                      isLoading: false,
-                      text: "Create",
-                      press: () => {})
+                  BlocConsumer<CreateRoomCubit,
+                      CreateRoomState>(
+                    listener: (context, state) {
+                      if (state is CreateRoomSuccess) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ConversationScreen()));
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is CreateRoomLoading) {
+                        return RoundedButton(
+                            isLoading: true,
+                            text: '',
+                            press: () {});
+                      } else {
+                        return RoundedButton(
+                            isLoading: false,
+                            text: "Create",
+                            press: () => {
+                                  if (_user != null)
+                                    {
+                                      BlocProvider.of<
+                                                  CreateRoomCubit>(
+                                              context)
+                                          .createRoom(
+                                              roomName:
+                                                  _roomName,
+                                              roomDescription:
+                                                  _roomDescription,
+                                              roomPassword:
+                                                  _roomPassword,
+                                              roomPerimeter:
+                                                  _roomPerimeter,
+                                              roomType:
+                                                  _chosenValue,
+                                              userToken:
+                                                  _user
+                                                      .token)
+                                    }
+                                  else
+                                    {
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder:
+                                                  (context) =>
+                                                      const LoginScreen()),
+                                          (route) => false)
+                                    }
+                                });
+                      }
+                    },
+                  ),
                 ]),
           ),
         ));
@@ -131,12 +193,26 @@ class _CreateRoomState extends State<CreateRoom> {
   }
 
   void onChangedPassword(String value) {
-    print(value);
+    setState(() {
+      _roomPassword = value;
+    });
   }
 
   void onChangedRoomName(String value) {
-    print(value);
+    setState(() {
+      _roomName = value;
+    });
   }
 
-  void onChangedRoomPerimeter(String value) {}
+  void onChangedRoomPerimeter(String value) {
+    setState(() {
+      _roomPerimeter = value;
+    });
+  }
+
+  void onChangedRoomDescription(String value) {
+    setState(() {
+      _roomDescription = value;
+    });
+  }
 }

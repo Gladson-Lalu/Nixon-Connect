@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nixon_connect/Common/constant.dart';
+import 'package:nixon_connect/Cubit/auth/auth_cubit.dart';
 import 'package:nixon_connect/Views/Screens/ChatHome/home_screen.dart';
-import 'package:nixon_connect/cubit/auth_cubit.dart';
 
 import '../../components/already_have_an_account_check.dart';
 import '../../components/background.dart';
@@ -100,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             SizedBox(height: size.height * 0.03),
             RoundedInputField(
+              textInputType: TextInputType.emailAddress,
               hintText: "Your Email",
               onChanged: (value) {
                 setState(() {
