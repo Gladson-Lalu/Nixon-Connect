@@ -2,14 +2,14 @@ const { mongoose } = require('mongoose');
 const express = require('express');
 require('dotenv').config({ path: 'config.env' });
 const authRoutes = require('./routes/auth_routes');
-const rootRoutes = require('./routes/root_routes');
+const apiRoutes = require('./routes/api_routes');
 
 const app = express();
 
 
 app.use(express.json());
 app.use(authRoutes);
-app.use(rootRoutes);
+app.use(apiRoutes);
 
 
 app.get('*', (_, res) => {

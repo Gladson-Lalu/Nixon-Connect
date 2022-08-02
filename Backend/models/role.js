@@ -4,7 +4,8 @@ const { Schema, Types, model } = require('mongoose');
 const roleSchema = new Schema({
     roleName: {
         type: String,
-        required: [true, 'Please enter role name'],
+        required: true,
+        default: 'member',
     },
     userPermissions: [{ type: Types.ObjectId, ref: 'Permission' }],
     room: { type: Types.ObjectId, ref: 'Room' },
