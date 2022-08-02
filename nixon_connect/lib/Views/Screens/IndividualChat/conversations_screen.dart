@@ -150,8 +150,7 @@ class _ConversationScreenState
 
   Widget subMenuWidget(
       List<String> submenus, bool isValidSubMenu) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+    return Container(
       height: isValidSubMenu
           ? submenus.length.toDouble() * 37.5
           : 45,

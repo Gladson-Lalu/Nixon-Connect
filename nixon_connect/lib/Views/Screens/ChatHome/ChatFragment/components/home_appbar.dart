@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nixon_connect/Views/Screens/CreateRoom/create_room_screen.dart';
 
-AppBar homeAppBar() {
+AppBar homeAppBar({required BuildContext context}) {
   return AppBar(
     backgroundColor: Colors.white,
     elevation: 0,
@@ -17,7 +18,13 @@ AppBar homeAppBar() {
         child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
               primary: Colors.pink[50]),
-          onPressed: () => {},
+          onPressed: () => {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const CreateRoom()))
+          },
           icon: const Icon(
             Icons.add,
             color: Colors.pink,
