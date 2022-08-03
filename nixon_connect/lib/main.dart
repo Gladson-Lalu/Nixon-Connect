@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:nixon_connect/Services/auth_service.dart';
-import 'package:nixon_connect/Views/Screens/Launch/splash_screen.dart';
+import 'Services/auth_service.dart';
+import 'Views/Screens/Launch/splash_screen.dart';
 
 import 'Common/theme.dart';
 import 'Cubit/auth/auth_cubit.dart';

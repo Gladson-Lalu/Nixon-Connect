@@ -3,11 +3,9 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:nixon_connect/Common/validator.dart';
-import 'package:nixon_connect/Common/validator.dart';
-import 'package:nixon_connect/Common/validator.dart';
-import 'package:nixon_connect/Models/user_model.dart';
-import 'package:nixon_connect/Services/auth_service.dart';
+import '../../Common/validator.dart';
+import '../../Models/user_model.dart';
+import '../../Services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'auth_state.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nixon_connect/Common/constant.dart';
+import '../../Common/constant.dart';
 
 class Background extends StatelessWidget {
   final Widget child;

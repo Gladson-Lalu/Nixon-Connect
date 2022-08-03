@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nixon_connect/Common/constant.dart';
-import 'package:nixon_connect/Cubit/auth/auth_cubit.dart';
-import 'package:nixon_connect/Cubit/create_room/create_room_cubit.dart';
-import 'package:nixon_connect/Models/user_model.dart';
-import 'package:nixon_connect/Views/Screens/IndividualChat/conversations_screen.dart';
-import 'package:nixon_connect/Views/Screens/Login/login_screen.dart';
-import 'package:nixon_connect/Views/components/rounded_button.dart';
-import 'package:nixon_connect/Views/components/rounded_input_field.dart';
-import 'package:nixon_connect/Views/components/rounded_password_field.dart';
-import 'package:nixon_connect/Views/components/text_field_container.dart';
+import '../../../Common/constant.dart';
+import '../../../Cubit/auth/auth_cubit.dart';
+import '../../../Cubit/create_room/create_room_cubit.dart';
+import '../../../Models/user_model.dart';
+import '../IndividualChat/conversations_screen.dart';
+import '../Login/login_screen.dart';
+import '../../components/rounded_button.dart';
+import '../../components/rounded_input_field.dart';
+import '../../components/rounded_password_field.dart';
+import '../../components/text_field_container.dart';
 
 class CreateRoom extends StatefulWidget {
   const CreateRoom({Key? key}) : super(key: key);

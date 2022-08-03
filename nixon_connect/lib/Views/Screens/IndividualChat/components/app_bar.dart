@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nixon_connect/Common/constant.dart';
+import '../../../../Common/constant.dart';
 
 AppBar buildAppBar() {
   return AppBar(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nixon_connect/Views/Screens/IndividualChat/conversations_screen.dart';
+import '../../../IndividualChat/conversations_screen.dart';
 
 class ChatListItem extends StatelessWidget {
   final String name;

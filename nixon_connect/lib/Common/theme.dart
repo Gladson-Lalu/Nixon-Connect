@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nixon_connect/Common/constant.dart';
+import 'constant.dart';
 
 ThemeData primaryTheme() {
   return ThemeData(

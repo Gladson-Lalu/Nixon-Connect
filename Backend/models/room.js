@@ -34,11 +34,7 @@ const roomSchema = new Schema({
     roomMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     roomRoles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
     roomMessages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-});
+}, { timestamps: true });
 
 //create room model
 const Room = model('Room', roomSchema);

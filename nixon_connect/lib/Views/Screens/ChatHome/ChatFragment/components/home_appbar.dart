@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nixon_connect/Views/Screens/CreateRoom/create_room_screen.dart';
+import '../../../CreateRoom/create_room_screen.dart';
 
 AppBar homeAppBar({required BuildContext context}) {
   return AppBar(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nixon_connect/Common/constant.dart';
-import 'package:nixon_connect/Views/Screens/ChatHome/Channels/channel_fragment.dart';
-import 'package:nixon_connect/Views/Screens/ChatHome/Profile/profile_fragment.dart';
+import '../../../Common/constant.dart';
+import 'Channels/channel_fragment.dart';
+import 'Profile/profile_fragment.dart';
 
 import 'ChatFragment/chat_fragment.dart';
 

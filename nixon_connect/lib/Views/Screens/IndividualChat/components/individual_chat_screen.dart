@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nixon_connect/Models/chat_message_model.dart';
+import '../../../../Models/chat_message_model.dart';
 
 import 'app_bar.dart';
 

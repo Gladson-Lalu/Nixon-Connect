@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nixon_connect/Common/constant.dart';
-import 'package:nixon_connect/Views/Screens/IndividualChat/components/individual_chat_screen.dart';
+import '../../../Common/constant.dart';
+import 'components/individual_chat_screen.dart';
 
 import '../../../Models/conversation_drawer_menu.dart';
 

@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:nixon_connect/Models/room_model.dart';
-import 'package:nixon_connect/Services/create_room.dart';
+import '../../Models/room_model.dart';
+import '../../Services/create_room.dart';
 
 import '../../Common/validator.dart';
 

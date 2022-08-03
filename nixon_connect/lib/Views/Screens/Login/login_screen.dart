@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nixon_connect/Common/constant.dart';
-import 'package:nixon_connect/Cubit/auth/auth_cubit.dart';
-import 'package:nixon_connect/Views/Screens/ChatHome/home_screen.dart';
+import '../../../Common/constant.dart';
+import '../../../Cubit/auth/auth_cubit.dart';
+import '../ChatHome/home_screen.dart';
 
 import '../../components/already_have_an_account_check.dart';
 import '../../components/background.dart';

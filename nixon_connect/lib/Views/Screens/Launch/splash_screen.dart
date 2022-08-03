@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nixon_connect/Cubit/auth/auth_cubit.dart';
-import 'package:nixon_connect/Views/Screens/Login/login_screen.dart';
+import '../../../Cubit/auth/auth_cubit.dart';
+import '../Login/login_screen.dart';
 
 import '../ChatHome/home_screen.dart';
 import 'components/logo_component.dart';

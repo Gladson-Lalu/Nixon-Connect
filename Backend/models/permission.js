@@ -1,5 +1,5 @@
 //create permissions enums
-const { Schema, Types, model } = require('mongoose');
+const { Schema, model } = require('mongoose');
 const permissionSchema = new Schema({
     permissionName: {
         type: String,

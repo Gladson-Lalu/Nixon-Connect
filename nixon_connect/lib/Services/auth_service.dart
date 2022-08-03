@@ -10,8 +10,6 @@ class AuthService {
   Future<http.Response> signIn(
       {required String email,
       required String password}) async {
-    http.Response res =
-        await http.get(Uri.parse(apiURI! + 'auth/logout'));
     final response = await http.post(
       Uri.parse(apiURI! + 'auth/login'),
       headers: {

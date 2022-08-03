@@ -24,11 +24,7 @@ const messageSchema = new Schema({
         type: { type: Types.ObjectId, ref: 'Room' },
         required: true,
     },
-    timestamp: {
-        type: Date,
-        default: Date.now,
-    },
-});
+}, { timestamps: true });
 
 //create message model
 const Message = model("Message", messageSchema);
