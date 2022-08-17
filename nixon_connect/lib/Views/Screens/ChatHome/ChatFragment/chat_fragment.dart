@@ -14,44 +14,44 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   List<ChatUsers> chatUsers = [
     ChatUsers(
-        name: "GLADSON",
+        name: "Flutter Dev",
         messageText: "Awesome Setup",
-        imageURL: "images/userImage1.jpeg",
+        imageURL: "https://unsplash.com/photos/iEEBWgY_6lA",
         time: "Now"),
     ChatUsers(
         name: "Glady's Murphy",
         messageText: "That's Great",
-        imageURL: "images/userImage2.jpeg",
+        imageURL: "https://unsplash.com/photos/WNoLnJo7tS8",
         time: "Yesterday"),
     ChatUsers(
         name: "Jorge Henry",
         messageText: "Hey where are you?",
-        imageURL: "images/userImage3.jpeg",
+        imageURL: "https://unsplash.com/photos/mEZ3PoFGs_k",
         time: "31 Mar"),
     ChatUsers(
         name: "Philip Fox",
         messageText: "Busy! Call me in 20 mins",
-        imageURL: "images/userImage4.jpeg",
+        imageURL: "https://unsplash.com/photos/rDEOVtE7vOs",
         time: "28 Mar"),
     ChatUsers(
         name: "Debra Hawkins",
         messageText: "Thankyou, It's awesome",
-        imageURL: "images/userImage5.jpeg",
+        imageURL: "https://unsplash.com/photos/SJvDxw0azqw",
         time: "23 Mar"),
     ChatUsers(
         name: "Jacob Pena",
         messageText: "will update you in evening",
-        imageURL: "images/userImage6.jpeg",
+        imageURL: "https://unsplash.com/photos/TSZo17r3m0s",
         time: "17 Mar"),
     ChatUsers(
         name: "Andrey Jones",
         messageText: "Can you please share the file?",
-        imageURL: "images/userImage7.jpeg",
+        imageURL: "https://unsplash.com/photos/_H6wpor9mjs",
         time: "24 Feb"),
     ChatUsers(
         name: "John Wick",
         messageText: "How are you?",
-        imageURL: "images/userImage8.jpeg",
+        imageURL: "https://unsplash.com/photos/XQWfro4LrVs",
         time: "18 Feb"),
   ];
   @override

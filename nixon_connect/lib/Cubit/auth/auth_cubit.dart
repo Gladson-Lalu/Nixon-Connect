@@ -17,18 +17,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   //get the user from the local storage
   Future<void> getUser() async {
-    if (user == null) {
-      final prefs = await SharedPreferences.getInstance();
-      final _user = prefs.getString('current-user');
-      if (_user != null) {
-        user = UserModel.fromJson(json.decode(_user));
-        emit(AuthSuccess(user: user!));
-      } else {
-        emit(const AuthInitial());
-      }
-    } else {
-      emit(AuthSuccess(user: user!));
-    }
+    emit(const AuthInitial());
   }
 
   //sign in

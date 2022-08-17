@@ -11,6 +11,7 @@ part 'create_room_state.dart';
 
 class CreateRoomCubit extends Cubit<CreateRoomState> {
   final _roomService = RoomService();
+  List<RoomModel> rooms = [];
   CreateRoomCubit() : super(const CreateRoomInitial());
 
   //create a room
