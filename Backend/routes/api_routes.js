@@ -5,7 +5,7 @@ const router = Router();
 
 //create room post route
 router.post('/api/room/create', createRoom);
-router.get('/', (req, res) => {
+router.get('/api/get', (req, res) => {
     console.log('api route');
     res.send('api route');
 }

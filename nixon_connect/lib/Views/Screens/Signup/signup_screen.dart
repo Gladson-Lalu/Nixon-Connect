@@ -41,6 +41,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             SizedBox(height: size.height * 0.03),
             RoundedInputField(
+              textInputType: TextInputType.name,
+              textCapitalization: TextCapitalization.words,
               hintText: "Name",
               onChanged: (value) {
                 setState(() {
@@ -50,6 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             RoundedInputField(
               hintText: "UserID",
+              textInputType: TextInputType.name,
               onChanged: (value) {
                 setState(() {
                   userID = value;
@@ -73,6 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               },
             ),
             RoundedInputField(
+              textInputType: TextInputType.visiblePassword,
               hintText: "Confirm Password",
               onChanged: (value) {
                 setState(() {

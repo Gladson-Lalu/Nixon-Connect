@@ -1,8 +1,10 @@
 {
     "cSpell.words": [
         "cdms",
+        "Cupertino",
         "dotenv",
-        "prefs"
+        "prefs",
+        "Schyler"
     ],
     "files.exclude": {
         "**/.git": true,
