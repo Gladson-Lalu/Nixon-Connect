@@ -1,5 +1,6 @@
 //user model
 class UserModel {
+  final String id;
   final String userID;
   final String name;
   final String profileUrl;
@@ -7,6 +8,7 @@ class UserModel {
   final String token;
 
   UserModel({
+    required this.id,
     required this.userID,
     required this.name,
     required this.profileUrl,
@@ -21,12 +23,14 @@ class UserModel {
       profileUrl: json['profileUrl'] ?? '',
       email: json['email'] ?? '',
       token: json['token'] ?? '',
+      id: json['id'] ?? '',
     );
   }
 
   //toJson
   Map<String, String> toJson() {
     return {
+      'id': id,
       'userID': userID,
       'name': name,
       'profileUrl': profileUrl,

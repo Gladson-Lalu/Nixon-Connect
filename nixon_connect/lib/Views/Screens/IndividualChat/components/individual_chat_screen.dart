@@ -44,7 +44,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   Widget build(BuildContext context) {
     final String currentUserId =
-        BlocProvider.of<AuthCubit>(context).user!.userID;
+        BlocProvider.of<AuthCubit>(context).user!.id;
     return Scaffold(
       appBar: buildAppBar(title: widget.roomModel.roomName),
       body: Stack(
@@ -68,6 +68,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     bool isReceiver =
                         _messages[index].sender !=
                             currentUserId;
+                    print(_messages[index].sender +
+                        "and" +
+                        currentUserId);
                     return Container(
                       padding: const EdgeInsets.only(
                           left: 14,
@@ -152,13 +155,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                 _messageController.text,
                             roomId:
                                 widget.roomModel.roomId);
-                        _messages.add(RoomMessage(
-                            messageId: '-1',
-                            message:
-                                _messageController.text,
-                            sender: currentUserId,
-                            room: widget.roomModel.roomId,
-                            createdAt: DateTime.now()));
                         _messageController.clear();
                         _scrollController.animateTo(
                             _scrollController

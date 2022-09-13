@@ -49,21 +49,14 @@ class SocketService {
 
     //on message-sent
     _socket!.on('message-sent', (data) {
-      print('fuck');
       if (data['success'] == true) {
         showToast('Message sent');
       } else {
-        print(data);
         showToast('Network error');
       }
     });
     print('socket initialized');
     _socket!.connect();
-
-    //handle errors
-    _socket!.on('error', (data) {
-      print("socket error" + data);
-    });
   }
 
   //connect to socket

@@ -31,6 +31,7 @@ const createUser = async (req, res) => {
         const token = createJWT(user);
         res.status(200).json({
             authentication: 'success', user: {
+                id: user._id,
                 name: user.name,
                 userID: user.userID,
                 email: user.email,
@@ -58,6 +59,7 @@ const loginUser = async (req, res) => {
             const token = createJWT(user);
             res.status(200).json({
                 authentication: 'success', user: {
+                    id: user._id,
                     name: user.name,
                     userID: user.userID,
                     email: user.email,

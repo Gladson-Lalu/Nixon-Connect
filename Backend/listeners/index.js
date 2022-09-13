@@ -29,10 +29,9 @@ const listeners = (io) => {
                         }
 
                         //add this user to all socket rooms that he is a member of
-                        user.rooms.forEach(roomId => {
-                            socket.join(roomId);
+                        user.rooms.forEach(room => {
+                            socket.join(room.toString());
                         });
-
                         //add this user to the active users hash map
                         activeUsers[token] = [userId, socket.id];
                         //send the active users hash map to the client
@@ -74,7 +73,7 @@ const listeners = (io) => {
                                 });
                                 newMessage.save().then(message => {
                                     //send message to all users in room
-                                    io.to(roomId).emit('message-received', message);
+                                    io.in(roomId).emit('message-received', message);
                                     io.to(socket.id).emit('message-sent', { success: true });
                                 }).catch(err => {
                                     console.log(err);
