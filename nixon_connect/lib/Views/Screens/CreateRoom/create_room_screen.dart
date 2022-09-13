@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../Common/constant.dart';
 import '../../../Cubit/auth/auth_cubit.dart';
 import '../../../Cubit/create_room/create_room_cubit.dart';
 import '../../../Models/user_model.dart';
-import '../IndividualChat/conversations_screen.dart';
-import '../Login/login_screen.dart';
 import '../../components/rounded_button.dart';
 import '../../components/rounded_input_field.dart';
 import '../../components/rounded_password_field.dart';
 import '../../components/text_field_container.dart';
+import '../IndividualChat/conversations_screen.dart';
+import '../Login/login_screen.dart';
 
 class CreateRoom extends StatefulWidget {
   const CreateRoom({Key? key}) : super(key: key);
@@ -64,6 +65,8 @@ class _CreateRoomState extends State<CreateRoom> {
                   SizedBox(height: _size.height * 0.05),
                   RoundedInputField(
                       hintText: "Room Name",
+                      textCapitalization:
+                          TextCapitalization.words,
                       icon: Icons.group,
                       onChanged: onChangedRoomName),
                   TextFieldContainer(
@@ -106,11 +109,13 @@ class _CreateRoomState extends State<CreateRoom> {
                       CreateRoomState>(
                     listener: (context, state) {
                       if (state is CreateRoomSuccess) {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const ConversationScreen()));
+                                    ConversationScreen(
+                                        roomModel: state
+                                            .roomModel)));
                       }
                     },
                     builder: (context, state) {

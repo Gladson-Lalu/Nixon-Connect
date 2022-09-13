@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+
 import '../../../Common/constant.dart';
 import 'Channels/channel_fragment.dart';
-import 'Profile/profile_fragment.dart';
-
 import 'ChatFragment/chat_fragment.dart';
+import 'Profile/profile_fragment.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

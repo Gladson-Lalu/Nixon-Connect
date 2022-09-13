@@ -10,7 +10,6 @@ import '../../Common/validator.dart';
 part 'create_room_state.dart';
 
 class CreateRoomCubit extends Cubit<CreateRoomState> {
-  final _roomService = RoomService();
   List<RoomModel> rooms = [];
   CreateRoomCubit() : super(const CreateRoomInitial());
 
@@ -23,6 +22,7 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
       required String? roomType,
       required String userToken}) async {
     {
+      final _roomService = RoomService();
       try {
         if (validateRoomName(roomName) &&
             validateRoomPassword(roomType, roomPassword) &&
@@ -39,7 +39,8 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
           );
           if (response.statusCode == 200) {
             final roomModel = RoomModel.fromJson(
-                json.decode(response.body));
+                json.decode(response.body)['room']);
+            rooms.add(roomModel);
             emit(CreateRoomSuccess(roomModel));
           } else {
             emit(const CreateRoomError());

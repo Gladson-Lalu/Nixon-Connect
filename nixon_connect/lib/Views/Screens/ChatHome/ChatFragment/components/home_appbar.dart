@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../CreateRoom/create_room_screen.dart';
 
 AppBar homeAppBar({required BuildContext context}) {
@@ -17,7 +18,7 @@ AppBar homeAppBar({required BuildContext context}) {
         padding: const EdgeInsets.all(12.0),
         child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-              primary: Colors.pink[50]),
+              backgroundColor: Colors.pink[50]),
           onPressed: () => {
             Navigator.push(
                 context,

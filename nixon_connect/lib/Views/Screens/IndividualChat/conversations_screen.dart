@@ -1,11 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:nixon_connect/Models/room_model.dart';
 import '../../../Common/constant.dart';
 import 'components/individual_chat_screen.dart';
 
 import '../../../Models/conversation_drawer_menu.dart';
 
 class ConversationScreen extends StatefulWidget {
-  const ConversationScreen({Key? key}) : super(key: key);
+  final RoomModel roomModel;
+  const ConversationScreen(
+      {Key? key, required this.roomModel})
+      : super(key: key);
 
   @override
   _ConversationScreenState createState() =>
@@ -25,7 +30,9 @@ class _ConversationScreenState
               child: isExpanded
                   ? blackIconTiles()
                   : blackIconMenu()),
-          const Expanded(child: ChatDetailPage())
+          Expanded(
+              child: ChatDetailPage(
+                  roomModel: widget.roomModel))
         ]));
   }
 
@@ -80,8 +87,8 @@ class _ConversationScreenState
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: ListTile(
         leading: buildCircleAvatar(),
-        title: const Text("Room Name",
-            style: TextStyle(
+        title: Text(widget.roomModel.roomName,
+            style: const TextStyle(
               fontSize: 20,
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -92,9 +99,9 @@ class _ConversationScreenState
   }
 
   buildCircleAvatar() {
-    return const CircleAvatar(
-      backgroundImage: NetworkImage(
-          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80"),
+    return CircleAvatar(
+      backgroundImage: CachedNetworkImageProvider(
+          widget.roomModel.roomAvatar),
       backgroundColor: Colors.white,
       radius: 30,
     );
@@ -126,12 +133,19 @@ class _ConversationScreenState
                   );
                 }),
           ),
-          const Align(
+          Align(
             alignment: Alignment.bottomCenter,
             child: SizedBox(
               height: 80,
-              child: Icon(Icons.keyboard_arrow_left_sharp,
-                  color: Colors.white, size: 30),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                    Icons.keyboard_arrow_left_sharp,
+                    color: Colors.white,
+                    size: 30),
+              ),
             ),
           ),
         ],

@@ -3,6 +3,7 @@
         "cdms",
         "Cupertino",
         "dotenv",
+        "objectbox",
         "prefs",
         "Schyler"
     ],
@@ -21,7 +22,6 @@
         "ios": true,
         "pubspec.lock": true,
         "lib/generated_plugin_registrant.dart": true,
-        "windows": true,
         "web": true,
         ".metadata": true,
         ".flutter-plugins-dependencies": true,
@@ -29,7 +29,7 @@
         ".packages": true,
         ".idea": true,
         ".dart_tool": true,
-        ".vscode": true
+        "windows": true
     },
     "hide-files.files": [
         ".flutter-plugins",
@@ -40,7 +40,6 @@
         "ios",
         "pubspec.lock",
         "lib/generated_plugin_registrant.dart",
-        "windows",
         "web",
         ".metadata",
         ".flutter-plugins-dependencies",
@@ -48,6 +47,6 @@
         ".packages",
         ".idea",
         ".dart_tool",
-        ".vscode"
+        "windows"
     ]
 }

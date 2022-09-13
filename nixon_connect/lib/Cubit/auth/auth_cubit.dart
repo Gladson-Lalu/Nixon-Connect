@@ -3,21 +3,26 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../Common/validator.dart';
 import '../../Models/user_model.dart';
 import '../../Services/auth_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../Handlers/socket_handler.dart';
+import '../../Services/sync_service.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthService _authService;
+  final _socketService = SocketService.instance;
   UserModel? user;
   AuthCubit(this._authService) : super(const AuthInitial());
 
   //get the user from the local storage
   Future<void> getUser() async {
     if (user != null) {
+      initServices();
       emit(AuthSuccess(user: user!));
     } else {
       try {
@@ -28,7 +33,9 @@ class AuthCubit extends Cubit<AuthState> {
             prefs.getString('current-user');
         if (userString != null) {
           user = UserModel.fromJson(jsonDecode(userString));
-          emit(AuthSuccess(user: user as UserModel));
+
+          initServices();
+          emit(AuthSuccess(user: user!));
         } else {
           emit(const AuthInitial());
         }
@@ -53,6 +60,8 @@ class AuthCubit extends Cubit<AuthState> {
         if (response.statusCode == 200) {
           user = UserModel.fromJson(
               json.decode(response.body)['user']);
+          saveUserData(user: user!);
+          initServices();
           emit(AuthSuccess(user: user!));
         } else {
           emit(const AuthError(error: ''));
@@ -92,6 +101,7 @@ class AuthCubit extends Cubit<AuthState> {
           user = UserModel.fromJson(
               json.decode(response.body)['user']);
           saveUserData(user: user!);
+          initServices();
           emit(AuthSuccess(user: user!));
         } else {
           emit(const AuthError(error: ''));
@@ -125,4 +135,13 @@ class AuthCubit extends Cubit<AuthState> {
     prefs.setString(
         'current-user', jsonEncode(user.toJson()));
   }
+
+  //initialize the socket service after Authentication is successful
+  initServices() {
+    SyncServer.instance.syncData(userToken: user!.token);
+    _socketService.initSocket(token: user!.token);
+  }
+
+  //verify the token
+
 }

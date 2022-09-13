@@ -1,7 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import '../../../../Common/constant.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../../Common/constant.dart';
 
 class LogoBuild extends StatelessWidget {
   const LogoBuild({

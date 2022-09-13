@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../Common/constant.dart';
 
 class OrVerticalDivider extends StatelessWidget {

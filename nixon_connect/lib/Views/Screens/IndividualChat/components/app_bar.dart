@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../Common/constant.dart';
 
-AppBar buildAppBar() {
+AppBar buildAppBar({required String title}) {
   return AppBar(
     systemOverlayStyle: const SystemUiOverlayStyle(
       statusBarColor: Colors.black,
@@ -24,9 +24,9 @@ AppBar buildAppBar() {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text(
-                  "GLADSON",
-                  style: TextStyle(
+                Text(
+                  title,
+                  style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600),
                 ),

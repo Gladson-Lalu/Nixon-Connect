@@ -1,28 +1,35 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:nixon_connect/Models/room_model.dart';
+
 import '../../../IndividualChat/conversations_screen.dart';
 
 class ChatListItem extends StatelessWidget {
-  final String name;
-  final String messageText;
-  final String imageUrl;
-  final String time;
-  final bool isMessageRead;
-  const ChatListItem(
-      {Key? key,
-      required this.name,
-      required this.messageText,
-      required this.imageUrl,
-      required this.time,
-      required this.isMessageRead})
+  final RoomModel room;
+
+  const ChatListItem({Key? key, required this.room})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String time = '';
+    final difference =
+        DateTime.now().difference(room.lastUpdatedAt);
+    if (difference.inDays > 0) {
+      time = '${difference.inDays}d ago';
+    } else if (difference.inHours > 0) {
+      time = '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      time = '${difference.inMinutes}m ago';
+    } else {
+      time = 'Now';
+    }
+
     return GestureDetector(
       onTap: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-          return const ConversationScreen();
+          return ConversationScreen(roomModel: room);
         }));
       },
       child: Container(
@@ -34,7 +41,9 @@ class ChatListItem extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundImage: NetworkImage(imageUrl),
+                    backgroundImage:
+                        CachedNetworkImageProvider(
+                            room.roomAvatar),
                     maxRadius: 30,
                   ),
                   const SizedBox(
@@ -48,21 +57,21 @@ class ChatListItem extends StatelessWidget {
                             CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            name,
+                            room.roomName,
                             style: const TextStyle(
-                                fontSize: 16),
+                                fontSize: 16,
+                                fontWeight:
+                                    FontWeight.w500),
                           ),
                           const SizedBox(
                             height: 6,
                           ),
                           Text(
-                            messageText,
+                            room.lastMessage,
                             style: TextStyle(
                                 fontSize: 13,
-                                color: Colors.grey.shade600,
-                                fontWeight: isMessageRead
-                                    ? FontWeight.bold
-                                    : FontWeight.normal),
+                                color:
+                                    Colors.grey.shade600),
                           ),
                         ],
                       ),
@@ -74,10 +83,11 @@ class ChatListItem extends StatelessWidget {
             Text(
               time,
               style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: isMessageRead
-                      ? FontWeight.bold
-                      : FontWeight.normal),
+                fontSize: 12,
+                fontWeight: time == 'Now'
+                    ? FontWeight.bold
+                    : FontWeight.normal,
+              ),
             ),
           ],
         ),

@@ -85,7 +85,6 @@ validateRoomName(String roomName) {
   return true;
 }
 
-//validate room password having 5-8 characters without space
 validateRoomPassword(
     String? roomType, String roomPassword) {
   if (roomType != null && roomType != 'Public') {
@@ -93,12 +92,12 @@ validateRoomPassword(
       showToast("Room password field is empty");
       return false;
     }
+    //5-8 characters without space
     bool validPassword =
-        RegExp(r'^(?=.*?[a-z|A-Z])(?=.*?[0-9]).{5,8}$')
-            .hasMatch(roomPassword);
+        RegExp(r'^[^\s]{5,8}$').hasMatch(roomPassword);
     if (!validPassword) {
       showToast(
-          "Room password should contain letters, numbers and must be 5-8 characters in length");
+          "Room password should be letters or numbers and must be 5-8 characters in length");
       return false;
     }
   }

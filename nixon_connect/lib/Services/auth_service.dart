@@ -4,8 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  static final String? apiURI = dotenv.env['API_URI'];
-  static const Duration timeout = Duration(seconds: 5);
+  String? apiURI = dotenv.env['API_URI'];
+  final Duration timeout = const Duration(seconds: 5);
 //SignIn method to get token
   Future<http.Response> signIn(
       {required String email,
