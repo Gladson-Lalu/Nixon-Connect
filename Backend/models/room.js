@@ -29,12 +29,17 @@ const roomSchema = new Schema({
     },
     roomAvatarUrl: {
         type: String,
-        default: 'https://www.clipartkey.com/view/ooxJoR_multiple-user-png-icon/',
+        default: 'https://about.fb.com/wp-content/uploads/2014/11/groupslogo2.jpg',
     },
     roomMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     roomRoles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
     roomMessages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
 }, { timestamps: true });
+
+//find room by id
+roomSchema.statics.findRoomById = function (roomId) {
+    return this.findById(roomId).populate('roomMembers').populate('roomHost').populate('roomRoles').populate('roomMessages');
+}
 
 //create room model
 const Room = model('Room', roomSchema);

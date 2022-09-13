@@ -40,7 +40,7 @@ const userSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    chats: [{ type: Types.ObjectId, ref: 'Room', default: [] }],
+    rooms: [{ type: Types.ObjectId, ref: 'Room' }],
     lastSeen: {
         required: true,
         type: Date,

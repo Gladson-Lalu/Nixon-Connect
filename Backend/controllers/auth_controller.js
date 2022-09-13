@@ -8,7 +8,8 @@ const createJWT = (user) => {
     const payload = {
         id: user._id,
     };
-    return sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+    //expires in 1 month
+    return sign(payload, process.env.JWT_SECRET);
 }
 
 //POST METHODS
@@ -16,7 +17,6 @@ const createJWT = (user) => {
 //create user (signup)
 const createUser = async (req, res) => {
     var { name, userID, password, email } = req.body;
-    console.log(name, userID, password, email);
     const user1 = await User.findOne({ userID });
     if (user1) {
         res.status(400).json({ error: 'UserID already exists' });
@@ -52,7 +52,6 @@ const createUser = async (req, res) => {
 //login user (login)
 const loginUser = async (req, res) => {
     var { email, password } = req.body;
-    console.log(email, password);
     email = email.toLowerCase();
     User.login(email, password).then(
         (user) => {
@@ -75,8 +74,33 @@ const loginUser = async (req, res) => {
         res.status(500).json({ error: err.message });
         return;
     });
-
-
 }
 
-module.exports = { createUser, loginUser };
+//verify token
+const verifyToken = (req, res) => {
+    const token = req.body.token;
+    if (!token) {
+        res.status(400).json({ error: 'token not found' });
+        return;
+    }
+    try {
+        const decoded = verify(token, process.env.JWT_SECRET);
+        //verify userId
+        User.findById(decoded.id).then((user) => {
+            if (!user) {
+                res.status(400).json({ error: 'user not found' });
+                return;
+            }
+            res.status(200).json({
+                authentication: 'success'
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err.message });
+        });
+    } catch (err) {
+        res.status(400).json({ error: 'token not verified' });
+    }
+}
+
+module.exports = { createUser, loginUser, verifyToken };
