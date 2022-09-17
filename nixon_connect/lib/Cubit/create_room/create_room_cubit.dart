@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:location/location.dart';
 import 'package:meta/meta.dart';
 import '../../Models/room_model.dart';
-import '../../Services/create_room.dart';
+import '../../Services/room_service.dart';
 
 import '../../Common/validator.dart';
+import '../../Services/location_service.dart';
 
 part 'create_room_state.dart';
 
@@ -29,14 +31,23 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
             validateRoomPerimeter(roomPerimeter) &&
             validateRoomType(roomType)) {
           emit(const CreateRoomLoading());
+          late LocationData locationData;
+          if (LocationService.instance.locationData !=
+              null) {
+            locationData =
+                LocationService.instance.locationData!;
+          } else {
+            locationData = await LocationService.instance
+                .getLocation();
+          }
           final response = await _roomService.createRoom(
-            roomName: roomName,
-            roomDescription: roomDescription,
-            roomPassword: roomPassword,
-            roomPerimeter: roomPerimeter,
-            roomType: roomType!,
-            userToken: userToken,
-          );
+              roomName: roomName,
+              roomDescription: roomDescription,
+              roomPassword: roomPassword,
+              roomPerimeter: roomPerimeter,
+              roomType: roomType!,
+              userToken: userToken,
+              locationData: locationData);
           if (response.statusCode == 200) {
             final roomModel = RoomModel.fromJson(
                 json.decode(response.body)['room']);

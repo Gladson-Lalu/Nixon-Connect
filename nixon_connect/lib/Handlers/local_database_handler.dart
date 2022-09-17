@@ -110,6 +110,10 @@ class LocalDatabase {
     //check if message already exists
     final _roomBox = Box<RoomModel>(_store);
     final _messageBox = Box<RoomMessage>(_store);
+    if (message.messageId == '-1') {
+      _messageBox.put(message);
+      return;
+    }
     final messageExists = _messageBox
         .query(RoomMessage_.messageId
             .equals(message.messageId))
@@ -124,6 +128,11 @@ class LocalDatabase {
         room.lastMessage = message.message;
         room.lastUpdatedAt = message.createdAt;
         _roomBox.put(room);
+        //remove all message where message id is -1
+        _messageBox
+            .query(RoomMessage_.messageId.equals('-1'))
+            .build()
+            .remove();
         _messageBox.put(message);
       }
     }
@@ -148,8 +157,8 @@ class LocalDatabase {
         if (room != null) {
           room.lastMessage = message['message'];
           if (room.lastUpdatedAt
-              .isBefore(message['createdAt'])) {
-            room.lastUpdatedAt = message['createdAt'];
+              .isBefore(message['lastUpdatedAt'])) {
+            room.lastUpdatedAt = message['lastUpdatedAt'];
           }
           _roomBox.put(room);
           _messageBox.put(RoomMessage.fromJson(message));

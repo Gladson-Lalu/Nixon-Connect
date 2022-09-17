@@ -5,7 +5,8 @@
         "dotenv",
         "objectbox",
         "prefs",
-        "Schyler"
+        "Schyler",
+        "workmanager"
     ],
     "files.exclude": {
         "**/.git": true,
@@ -19,14 +20,11 @@
         "analysis_options.yaml": true,
         "README.md": true,
         "build": true,
-        "ios": true,
         "pubspec.lock": true,
         "lib/generated_plugin_registrant.dart": true,
         "web": true,
         ".metadata": true,
         ".flutter-plugins-dependencies": true,
-        "nixon_connect.iml": true,
-        ".packages": true,
         ".idea": true,
         ".dart_tool": true,
         "windows": true
@@ -37,14 +35,11 @@
         "analysis_options.yaml",
         "README.md",
         "build",
-        "ios",
         "pubspec.lock",
         "lib/generated_plugin_registrant.dart",
         "web",
         ".metadata",
         ".flutter-plugins-dependencies",
-        "nixon_connect.iml",
-        ".packages",
         ".idea",
         ".dart_tool",
         "windows"

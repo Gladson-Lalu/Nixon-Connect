@@ -1,6 +1,10 @@
 //socket service with socket.io and singleton pattern
 
+import 'dart:async';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:location_platform_interface/location_platform_interface.dart';
+import 'package:nixon_connect/Services/location_service.dart';
 import 'package:nixon_connect/Services/message_service.dart';
 import 'package:socket_io_client/socket_io_client.dart'
     // ignore: library_prefixes
@@ -15,6 +19,8 @@ class SocketService {
     return _instance!;
   }
 
+  final LocationService _locationService =
+      LocationService.instance;
   SocketService._init();
   IO.Socket? _socket;
   IO.Socket? get socket => _socket;
@@ -22,6 +28,10 @@ class SocketService {
   String? token;
   static final socketURI = dotenv.env['SOCKET_URI'];
 
+  final StreamController _channelStreamController =
+      StreamController.broadcast();
+  Stream get channelStream =>
+      _channelStreamController.stream;
   void initSocket({required String token}) {
     this.token = token;
     _socket = IO.io(socketURI, <String, dynamic>{
@@ -32,15 +42,16 @@ class SocketService {
     //on connect
     _socket!.onConnect((_) {
       _socket!.emit('authenticate', {'token': token});
+      _locationService.startSendingLocation();
     });
 
-    //on user-connected
-    _socket!.on('user-connected', (data) {
-      if (data['success'] == true) {
-        showToast('User connected');
-      } else {
-        showToast('Network error');
-      }
+    _socket!.onDisconnect((_) {
+      _locationService.stopSendingLocation();
+    });
+
+    //on error
+    _socket!.on('error', (data) {
+      showToast(data['message']);
     });
 
     _socket!.on('message-received', (data) {
@@ -55,7 +66,11 @@ class SocketService {
         showToast('Network error');
       }
     });
-    print('socket initialized');
+    //on room invite
+    _socket!.on('room-invite', (data) {
+      _channelStreamController.add(data);
+    });
+
     _socket!.connect();
   }
 
@@ -79,6 +94,16 @@ class SocketService {
       'message': message,
       'mentions': mentions,
       'roomId': roomId,
+    });
+  }
+
+  void sendLocation(LocationData locationData) {
+    _socket!.emit('send-location', {
+      'token': token,
+      'location': {
+        'latitude': locationData.latitude,
+        'longitude': locationData.longitude,
+      }
     });
   }
 }

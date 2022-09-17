@@ -8,16 +8,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Common/validator.dart';
 import '../../Models/user_model.dart';
 import '../../Services/auth_service.dart';
-import '../../Handlers/socket_handler.dart';
+import '../../Services/socket_service.dart';
 import '../../Services/sync_service.dart';
+import '../channels/channels_cubit.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final AuthService _authService;
+  final AuthService _authService = AuthService();
+  final ChannelsCubit _channelCubit;
   final _socketService = SocketService.instance;
   UserModel? user;
-  AuthCubit(this._authService) : super(const AuthInitial());
+  AuthCubit(this._channelCubit)
+      : super(const AuthInitial());
 
   //get the user from the local storage
   Future<void> getUser() async {
@@ -140,6 +143,7 @@ class AuthCubit extends Cubit<AuthState> {
   initServices() {
     SyncServer.instance.syncData(userToken: user!.token);
     _socketService.initSocket(token: user!.token);
+    _channelCubit.initChannels();
   }
 
   //verify the token

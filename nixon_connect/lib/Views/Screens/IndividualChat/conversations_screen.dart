@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:nixon_connect/Models/room_model.dart';
+import '../../../Models/room_model.dart';
 import '../../../Common/constant.dart';
 import 'components/individual_chat_screen.dart';
 

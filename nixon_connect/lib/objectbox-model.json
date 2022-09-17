@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:1735908140870699501",
-      "lastPropertyId": "6:3154689605823494400",
+      "lastPropertyId": "7:7434389742705426507",
       "name": "RoomMessage",
       "properties": [
         {
@@ -40,13 +40,18 @@
           "id": "6:3154689605823494400",
           "name": "createdAt",
           "type": 10
+        },
+        {
+          "id": "7:7434389742705426507",
+          "name": "mentions",
+          "type": 30
         }
       ],
       "relations": []
     },
     {
       "id": "5:1509511342066053177",
-      "lastPropertyId": "16:8369255689500189870",
+      "lastPropertyId": "17:7317498931347203851",
       "name": "RoomModel",
       "properties": [
         {
@@ -115,6 +120,11 @@
         {
           "id": "16:8369255689500189870",
           "name": "lastUpdatedAt",
+          "type": 10
+        },
+        {
+          "id": "17:7317498931347203851",
+          "name": "createdAt",
           "type": 10
         }
       ],

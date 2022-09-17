@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nixon_connect/Cubit/auth/auth_cubit.dart';
-import 'package:nixon_connect/Models/room_message.dart';
-import 'package:nixon_connect/Models/room_model.dart';
-import 'package:nixon_connect/Handlers/local_database_handler.dart';
+import '../../../../Cubit/auth/auth_cubit.dart';
+import '../../../../Models/room_message.dart';
+import '../../../../Models/room_model.dart';
+import '../../../../Handlers/local_database_handler.dart';
 
 import '../../../../Services/message_service.dart';
 import 'app_bar.dart';
@@ -18,23 +18,6 @@ class ChatDetailPage extends StatefulWidget {
 }
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
-  // List<ChatMessage> messages = [
-  //   ChatMessage(
-  //       messageContent: "Hello, how are you?",
-  //       messageType: "receiver"),
-  //   ChatMessage(
-  //       messageContent: "👋", messageType: "receiver"),
-  //   ChatMessage(
-  //       messageContent:
-  //           "Hey Gladson, I am doing fine dude. wbu?",
-  //       messageType: "sender"),
-  //   ChatMessage(
-  //       messageContent: "😊", messageType: "receiver"),
-  //   ChatMessage(
-  //       messageContent: "I am fine, thanks",
-  //       messageType: "sender"),
-  // ];
-
   final TextEditingController _messageController =
       TextEditingController();
   final ScrollController _scrollController =
@@ -68,9 +51,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     bool isReceiver =
                         _messages[index].sender !=
                             currentUserId;
-                    print(_messages[index].sender +
-                        "and" +
-                        currentUserId);
                     return Container(
                       padding: const EdgeInsets.only(
                           left: 14,
@@ -87,7 +67,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                 BorderRadius.circular(20),
                             color: (isReceiver
                                 ? Colors.grey.shade200
-                                : _messages[index].id == -1
+                                : _messages[index]
+                                            .messageId ==
+                                        "-1"
                                     ? Colors.grey.shade200
                                     : Colors.blue[200]),
                           ),
@@ -150,6 +132,16 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     onPressed: () {
                       if (_messageController
                           .text.isNotEmpty) {
+                        LocalDatabase.instance.addMessage(
+                            RoomMessage(
+                                message:
+                                    _messageController.text,
+                                sender: currentUserId,
+                                room:
+                                    widget.roomModel.roomId,
+                                createdAt: DateTime.now(),
+                                messageId: '-1'));
+
                         MessageService.instance.sendMessage(
                             message:
                                 _messageController.text,

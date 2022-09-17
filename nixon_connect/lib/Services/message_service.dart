@@ -1,9 +1,7 @@
-//Message Service to handle socket events
-import 'package:nixon_connect/Handlers/socket_handler.dart';
+import 'package:nixon_connect/Services/socket_service.dart';
 import 'package:nixon_connect/Models/room_message.dart';
 
 import '../Handlers/local_database_handler.dart';
-import '../Models/room_model.dart';
 
 class MessageService {
   static MessageService? _instance;
@@ -24,9 +22,6 @@ class MessageService {
     if (room != null) {
       room.lastMessage = message.message;
       room.lastUpdatedAt = message.createdAt;
-      LocalDatabase.instance.store
-          .box<RoomModel>()
-          .put(room);
     }
   }
 

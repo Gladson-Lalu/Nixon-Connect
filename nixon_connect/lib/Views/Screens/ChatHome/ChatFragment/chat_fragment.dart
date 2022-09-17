@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nixon_connect/Models/room_model.dart';
-import 'package:nixon_connect/Handlers/local_database_handler.dart';
-import 'package:nixon_connect/Services/sync_service.dart';
+import '../../../../Models/room_model.dart';
+import '../../../../Handlers/local_database_handler.dart';
+import '../../../../Services/sync_service.dart';
 
 import '../../../../Cubit/auth/auth_cubit.dart';
 import 'components/home_appbar.dart';

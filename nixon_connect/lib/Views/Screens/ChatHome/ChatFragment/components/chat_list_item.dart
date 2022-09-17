@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:nixon_connect/Models/room_model.dart';
+import 'package:nixon_connect/Common/functions.dart';
+import '../../../../../Models/room_model.dart';
 
 import '../../../IndividualChat/conversations_screen.dart';
 
@@ -12,19 +13,8 @@ class ChatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String time = '';
-    final difference =
-        DateTime.now().difference(room.lastUpdatedAt);
-    if (difference.inDays > 0) {
-      time = '${difference.inDays}d ago';
-    } else if (difference.inHours > 0) {
-      time = '${difference.inHours}h ago';
-    } else if (difference.inMinutes > 0) {
-      time = '${difference.inMinutes}m ago';
-    } else {
-      time = 'Now';
-    }
-
+    final String time =
+        getTimeDifference(room.lastUpdatedAt);
     return GestureDetector(
       onTap: () {
         Navigator.push(context,

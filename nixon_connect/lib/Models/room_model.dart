@@ -1,4 +1,4 @@
-import 'package:nixon_connect/Models/room_message.dart';
+import 'room_message.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -15,6 +15,7 @@ class RoomModel {
   @Index()
   String roomId;
   DateTime lastUpdatedAt;
+  DateTime createdAt;
   List<String> roomMembers;
   String lastMessage;
 
@@ -31,6 +32,7 @@ class RoomModel {
       required this.roomMembers,
       required this.roomId,
       required this.lastUpdatedAt,
+      required this.createdAt,
       required this.lastMessage});
   factory RoomModel.fromJson(Map<String, dynamic> json) =>
       RoomModel(
@@ -52,6 +54,9 @@ class RoomModel {
             : DateTime.parse(json["updatedAt"]),
         roomId: json["_id"] ?? '',
         lastMessage: json["lastMessage"] ?? '',
+        createdAt: json["createdAt"] == null
+            ? DateTime.now()
+            : DateTime.parse(json["createdAt"]),
       );
 
   //to json
@@ -83,6 +88,7 @@ class RoomModel {
     String? roomId,
     String? lastMessage,
     int? id,
+    DateTime? createdAt,
     DateTime? lastMessageAt,
     List<RoomMessage>? roomMessages,
   }) =>
@@ -99,6 +105,7 @@ class RoomModel {
           roomRoles: roomRoles ?? this.roomRoles,
           lastUpdatedAt:
               lastUpdatedAt ?? this.lastUpdatedAt,
+          createdAt: createdAt ?? this.createdAt,
           roomMembers: roomMembers ?? this.roomMembers,
           roomId: roomId ?? this.roomId,
           lastMessage: lastMessage ?? this.lastMessage,

@@ -23,7 +23,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(1, 1735908140870699501),
       name: 'RoomMessage',
-      lastPropertyId: const IdUid(6, 3154689605823494400),
+      lastPropertyId: const IdUid(7, 7434389742705426507),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -56,6 +56,11 @@ final _entities = <ModelEntity>[
             id: const IdUid(6, 3154689605823494400),
             name: 'createdAt',
             type: 10,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(7, 7434389742705426507),
+            name: 'mentions',
+            type: 30,
             flags: 0)
       ],
       relations: <ModelRelation>[],
@@ -63,7 +68,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(5, 1509511342066053177),
       name: 'RoomModel',
-      lastPropertyId: const IdUid(16, 8369255689500189870),
+      lastPropertyId: const IdUid(17, 7317498931347203851),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -130,6 +135,11 @@ final _entities = <ModelEntity>[
         ModelProperty(
             id: const IdUid(16, 8369255689500189870),
             name: 'lastUpdatedAt',
+            type: 10,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(17, 7317498931347203851),
+            name: 'createdAt',
             type: 10,
             flags: 0)
       ],
@@ -231,13 +241,16 @@ ModelDefinition getObjectBoxModel() {
           final messageOffset = fbb.writeString(object.message);
           final senderOffset = fbb.writeString(object.sender);
           final roomOffset = fbb.writeString(object.room);
-          fbb.startTable(7);
+          final mentionsOffset = fbb.writeList(
+              object.mentions.map(fbb.writeString).toList(growable: false));
+          fbb.startTable(8);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, messageIdOffset);
           fbb.addOffset(2, messageOffset);
           fbb.addOffset(3, senderOffset);
           fbb.addOffset(4, roomOffset);
           fbb.addInt64(5, object.createdAt.millisecondsSinceEpoch);
+          fbb.addOffset(6, mentionsOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -256,7 +269,11 @@ ModelDefinition getObjectBoxModel() {
               room: const fb.StringReader(asciiOptimization: true)
                   .vTableGet(buffer, rootOffset, 12, ''),
               createdAt: DateTime.fromMillisecondsSinceEpoch(
-                  const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0)));
+                  const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0)),
+              mentions: const fb.ListReader<String>(
+                      fb.StringReader(asciiOptimization: true),
+                      lazy: false)
+                  .vTableGet(buffer, rootOffset, 16, []));
 
           return object;
         }),
@@ -284,7 +301,7 @@ ModelDefinition getObjectBoxModel() {
           final roomMembersOffset = fbb.writeList(
               object.roomMembers.map(fbb.writeString).toList(growable: false));
           final lastMessageOffset = fbb.writeString(object.lastMessage);
-          fbb.startTable(17);
+          fbb.startTable(18);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, roomNameOffset);
           fbb.addOffset(2, roomTypeOffset);
@@ -298,6 +315,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(12, roomMembersOffset);
           fbb.addOffset(13, lastMessageOffset);
           fbb.addInt64(15, object.lastUpdatedAt.millisecondsSinceEpoch);
+          fbb.addInt64(16, object.createdAt.millisecondsSinceEpoch);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -326,6 +344,7 @@ ModelDefinition getObjectBoxModel() {
               roomMembers: const fb.ListReader<String>(fb.StringReader(asciiOptimization: true), lazy: false).vTableGet(buffer, rootOffset, 28, []),
               roomId: const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 22, ''),
               lastUpdatedAt: DateTime.fromMillisecondsSinceEpoch(const fb.Int64Reader().vTableGet(buffer, rootOffset, 34, 0)),
+              createdAt: DateTime.fromMillisecondsSinceEpoch(const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0)),
               lastMessage: const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 30, ''));
 
           return object;
@@ -360,6 +379,10 @@ class RoomMessage_ {
   /// see [RoomMessage.createdAt]
   static final createdAt =
       QueryIntegerProperty<RoomMessage>(_entities[0].properties[5]);
+
+  /// see [RoomMessage.mentions]
+  static final mentions =
+      QueryStringVectorProperty<RoomMessage>(_entities[0].properties[6]);
 }
 
 /// [RoomModel] entity fields to define ObjectBox queries.
@@ -414,4 +437,8 @@ class RoomModel_ {
   /// see [RoomModel.lastUpdatedAt]
   static final lastUpdatedAt =
       QueryIntegerProperty<RoomModel>(_entities[1].properties[12]);
+
+  /// see [RoomModel.createdAt]
+  static final createdAt =
+      QueryIntegerProperty<RoomModel>(_entities[1].properties[13]);
 }
