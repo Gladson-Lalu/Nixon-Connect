@@ -31,9 +31,12 @@ const roomSchema = new Schema({
         type: String,
         default: 'https://about.fb.com/wp-content/uploads/2014/11/groupslogo2.jpg',
     },
+    lastMessage: {
+        type: String,
+        default: '',
+    },
     roomMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     roomRoles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
-    roomMessages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
 }, { timestamps: true });
 
 //find room by id

@@ -4,8 +4,6 @@ const User = require('../models/user');
 const Message = require('../models/message');
 const jwt = require('jsonwebtoken');
 module.exports.sync = (req, res) => {
-    console.log('syncing');
-
     if (req.headers['authorization']) {
         const token = req.headers['authorization'].split(' ')[1];
         const lastSyncTimestamp = req.body.lastSync;
