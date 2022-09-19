@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:nixon_connect/Services/socket_service.dart';
+import 'package:nixon_connect/Services/sync_service.dart';
 
 import '../../Common/validator.dart';
 import '../../Models/room_model.dart';
@@ -26,9 +28,11 @@ class JoinRoomCubit extends Cubit<JoinRoomState> {
             roomPassword: roomPassword,
             userToken: userToken);
         if (response.statusCode == 200) {
-          print(response.body);
           final roomModel = RoomModel.fromJson(
               json.decode(response.body)['room']);
+          SyncServer.instance
+              .syncData(userToken: userToken);
+          SocketService.instance.joinRoom(roomModel.roomId);
           emit(JoinRoomSuccess(roomModel));
         } else {
           emit(const JoinRoomError());

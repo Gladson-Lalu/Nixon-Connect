@@ -19,7 +19,6 @@ Future main() async {
   await LocalDatabase().init();
   await Workmanager().initialize(
     callbackDispatcher,
-    isInDebugMode: true,
   );
   await Workmanager().registerPeriodicTask(
     "1",

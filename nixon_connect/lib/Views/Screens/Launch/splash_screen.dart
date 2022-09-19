@@ -19,7 +19,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
     //SignInButton Animation Delay
     () async {
       Future.delayed(
-          const Duration(milliseconds: 1800),
+          const Duration(milliseconds: 2000),
           () => BlocProvider.of<AuthCubit>(context)
               .getUser());
     }.call();

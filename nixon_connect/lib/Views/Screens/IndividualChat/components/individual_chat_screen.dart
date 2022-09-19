@@ -1,5 +1,11 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:nixon_connect/Services/file_service.dart';
 import '../../../../Cubit/auth/auth_cubit.dart';
 import '../../../../Models/room_message.dart';
 import '../../../../Models/room_model.dart';
@@ -23,13 +29,19 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final ScrollController _scrollController =
       ScrollController();
   late List<RoomMessage> _messages;
+  File? _file;
+  bool isUploading = false;
+  double uploadProgress = 0;
 
   @override
   Widget build(BuildContext context) {
     final String currentUserId =
         BlocProvider.of<AuthCubit>(context).user!.id;
     return Scaffold(
-      appBar: buildAppBar(title: widget.roomModel.roomName),
+      appBar: buildAppBar(
+          title: widget.roomModel.roomName,
+          isLoading: isUploading,
+          loadingProgress: uploadProgress),
       body: Stack(
         children: <Widget>[
           StreamBuilder<Object>(
@@ -70,14 +82,88 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                 : _messages[index]
                                             .messageId ==
                                         "-1"
-                                    ? Colors.grey.shade200
+                                    ? Colors.grey.shade100
                                     : Colors.blue[200]),
                           ),
                           padding: const EdgeInsets.all(16),
-                          child: Text(
-                            _messages[index].message,
-                            style: const TextStyle(
-                                fontSize: 15),
+                          child: Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            children: [
+                              if (isReceiver)
+                                Text(
+                                  _messages[index]
+                                      .senderName,
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight:
+                                          FontWeight.w700,
+                                      color:
+                                          Colors.black87),
+                                )
+                              else
+                                const Text(
+                                  "You",
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight:
+                                          FontWeight.w700,
+                                      color:
+                                          Colors.black87),
+                                ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              _messages[index]
+                                          .messageType ==
+                                      'image'
+                                  ? CachedNetworkImage(
+                                      imageUrl:
+                                          _messages[index]
+                                              .message,
+                                    )
+                                  : _messages[index]
+                                              .messageType !=
+                                          "text"
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            FileService.instance.downloadAndOpenFile(
+                                                url: _messages[
+                                                        index]
+                                                    .message,
+                                                fileName: _messages[
+                                                        index]
+                                                    .id
+                                                    .toString());
+                                          },
+                                          child: SizedBox(
+                                            height: 100,
+                                            width: 100,
+                                            child: Center(
+                                              child: Column(
+                                                children: const [
+                                                  Icon(
+                                                    Icons
+                                                        .attachment,
+                                                    size:
+                                                        50,
+                                                  ),
+                                                  Text(
+                                                      "Download File"),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : Text(
+                                          _messages[index]
+                                              .message,
+                                          style:
+                                              const TextStyle(
+                                                  fontSize:
+                                                      15),
+                                        ),
+                            ],
                           ),
                         ),
                       ),
@@ -96,7 +182,22 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               child: Row(
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      showBottomSheet(
+                          backgroundColor:
+                              Colors.blueGrey[100],
+                          shape:
+                              const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                            ),
+                          ),
+                          enableDrag: true,
+                          context: context,
+                          builder: (context) =>
+                              bottomSheet(context));
+                    },
                     child: Container(
                       height: 30,
                       width: 30,
@@ -130,10 +231,30 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   ),
                   FloatingActionButton(
                     onPressed: () {
+                      //find first message mentions with @
+                      final List<String> mentions =
+                          _messageController.text
+                              .split(" ");
+                      final List<String> mentionedUsers =
+                          [];
+                      for (final String mention
+                          in mentions) {
+                        if (mention.startsWith("@")) {
+                          mentionedUsers.add(mention
+                              .substring(1)
+                              .toLowerCase());
+                        }
+                      }
+
                       if (_messageController
                           .text.isNotEmpty) {
                         LocalDatabase.instance.addMessage(
                             RoomMessage(
+                                messageType: 'text',
+                                senderName: BlocProvider.of<
+                                        AuthCubit>(context)
+                                    .user!
+                                    .name,
                                 message:
                                     _messageController.text,
                                 sender: currentUserId,
@@ -143,6 +264,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                 messageId: '-1'));
 
                         MessageService.instance.sendMessage(
+                            senderName:
+                                BlocProvider.of<AuthCubit>(
+                                        context)
+                                    .user!
+                                    .name,
+                            mentions: mentionedUsers,
                             message:
                                 _messageController.text,
                             roomId:
@@ -171,5 +298,157 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         ],
       ),
     );
+  }
+
+  void takePhoto(ImageSource source) async {
+    final ImagePicker _picker = ImagePicker();
+    final pickedFile = await _picker.pickImage(
+      source: source,
+    );
+    if (pickedFile != null) {
+      _file = File(pickedFile.path);
+      if (_file != null) {
+        setState(() {
+          isUploading = true;
+        });
+        MessageService.instance.sendFileMessage(
+            file: _file!,
+            senderName: BlocProvider.of<AuthCubit>(context)
+                .user!
+                .name,
+            roomId: widget.roomModel.roomId,
+            messageType: 'image',
+            onProgress: ((value) => setState(() {
+                  uploadProgress = value;
+                })),
+            context: context);
+        setState(() {
+          isUploading = false;
+        });
+      }
+    }
+  }
+
+  bottomSheet(BuildContext context) {
+    FilePickerResult? result;
+    return SizedBox(
+        height: 280,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: 20, vertical: 30),
+          child: GridView.count(
+            childAspectRatio: 1.2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+            crossAxisCount: 3,
+            children: <Widget>[
+              ElevatedButton(
+                  onPressed: () => {
+                        takePhoto(ImageSource.camera),
+                        Navigator.pop(context),
+                      },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0),
+                    child: Column(
+                      children: const [
+                        Icon(Icons.image),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text("Camera"),
+                      ],
+                    ),
+                  )),
+              ElevatedButton(
+                  onPressed: () => {
+                        takePhoto(ImageSource.gallery),
+                      },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0),
+                    child: Column(
+                      children: const [
+                        Icon(Icons.image),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text("Gallery"),
+                      ],
+                    ),
+                  )),
+              ElevatedButton(
+                  onPressed: () async {
+                    result = await FilePicker.platform
+                        .pickFiles();
+                    if (result != null) {
+                      _file =
+                          File(result!.files.single.path!);
+                      MessageService.instance
+                          .sendFileMessage(
+                              file: _file!,
+                              senderName: BlocProvider.of<
+                                      AuthCubit>(context)
+                                  .user!
+                                  .name,
+                              roomId:
+                                  widget.roomModel.roomId,
+                              messageType: 'file',
+                              onProgress: ((value) =>
+                                  setState(() {
+                                    uploadProgress = value;
+                                  })),
+                              context: context);
+                      setState(() {
+                        isUploading = false;
+                      });
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0),
+                    child: Column(
+                      children: const [
+                        Icon(Icons.file_present_rounded),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text("Document"),
+                      ],
+                    ),
+                  )),
+              ElevatedButton(
+                  onPressed: () => {},
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0),
+                    child: Column(
+                      children: const [
+                        Icon(Icons.image),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text("Video"),
+                      ],
+                    ),
+                  )),
+              ElevatedButton(
+                  onPressed: () => {},
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0),
+                    child: Column(
+                      children: const [
+                        Icon(Icons.image),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text("Poll"),
+                      ],
+                    ),
+                  )),
+            ],
+          ),
+        ));
   }
 }

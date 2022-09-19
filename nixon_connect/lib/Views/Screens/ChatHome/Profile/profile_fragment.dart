@@ -1,5 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../Cubit/auth/auth_cubit.dart';
+import '../../../../Models/user_model.dart';
 import 'Components/profile_header.dart';
 import 'Components/user_info.dart';
 
@@ -8,6 +12,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserModel? _user =
+        BlocProvider.of<AuthCubit>(context).user;
     return Scaffold(
         backgroundColor: Colors.grey.shade100,
         body: CustomScrollView(
@@ -20,11 +26,12 @@ class ProfilePage extends StatelessWidget {
                 background: Stack(
                   children: <Widget>[
                     Ink(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage(
-                                'https://firebasestorage.googleapis.com/v0/b/dl-flutter-ui-challenges.appspot.com/o/img%2F1.jpg?alt=media'),
-                            fit: BoxFit.cover),
+                          image: CachedNetworkImageProvider(
+                              Uri.parse(_user!.profileUrl)
+                                  .toString()),
+                        ),
                       ),
                     ),
                     Ink(
@@ -53,14 +60,12 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
             ),
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: ProfileHeader(
-                avatar: NetworkImage(
-                  'https://firebasestorage.googleapis.com/v0/b/dl-flutter-ui-challenges.appspot.com/o/img%2F1.jpg?alt=media',
-                ),
-                title: "Ramesh Mana",
-                subtitle: "Manager",
-              ),
+                  avatar: CachedNetworkImageProvider(
+                      Uri.parse(_user.profileUrl)
+                          .toString()),
+                  title: _user.name),
             ),
             const SliverToBoxAdapter(
               child: UserInfo(),

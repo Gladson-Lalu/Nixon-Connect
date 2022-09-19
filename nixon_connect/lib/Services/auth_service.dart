@@ -63,4 +63,24 @@ class AuthService {
         .timeout(timeout);
     return response;
   }
+
+  //update profile picture
+  Future<http.Response> updateProfilePicture(
+      {required String userToken,
+      required String profilePicture}) async {
+    final response = await http
+        .post(
+          Uri.parse(
+              apiURI! + 'auth/update-profile-picture'),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({
+            'token': userToken,
+            'profilePicture': profilePicture,
+          }),
+        )
+        .timeout(timeout);
+    return response;
+  }
 }

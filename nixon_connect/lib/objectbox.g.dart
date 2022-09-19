@@ -23,7 +23,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(1, 1735908140870699501),
       name: 'RoomMessage',
-      lastPropertyId: const IdUid(7, 7434389742705426507),
+      lastPropertyId: const IdUid(9, 6751201861564649267),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -61,6 +61,16 @@ final _entities = <ModelEntity>[
             id: const IdUid(7, 7434389742705426507),
             name: 'mentions',
             type: 30,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(8, 820185175347719406),
+            name: 'senderName',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(9, 6751201861564649267),
+            name: 'messageType',
+            type: 9,
             flags: 0)
       ],
       relations: <ModelRelation>[],
@@ -243,7 +253,9 @@ ModelDefinition getObjectBoxModel() {
           final roomOffset = fbb.writeString(object.room);
           final mentionsOffset = fbb.writeList(
               object.mentions.map(fbb.writeString).toList(growable: false));
-          fbb.startTable(8);
+          final senderNameOffset = fbb.writeString(object.senderName);
+          final messageTypeOffset = fbb.writeString(object.messageType);
+          fbb.startTable(10);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, messageIdOffset);
           fbb.addOffset(2, messageOffset);
@@ -251,6 +263,8 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(4, roomOffset);
           fbb.addInt64(5, object.createdAt.millisecondsSinceEpoch);
           fbb.addOffset(6, mentionsOffset);
+          fbb.addOffset(7, senderNameOffset);
+          fbb.addOffset(8, messageTypeOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -264,16 +278,17 @@ ModelDefinition getObjectBoxModel() {
                   .vTableGet(buffer, rootOffset, 6, ''),
               message: const fb.StringReader(asciiOptimization: true)
                   .vTableGet(buffer, rootOffset, 8, ''),
+              senderName: const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 18, ''),
+              messageType: const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 20, ''),
               sender: const fb.StringReader(asciiOptimization: true)
                   .vTableGet(buffer, rootOffset, 10, ''),
               room: const fb.StringReader(asciiOptimization: true)
                   .vTableGet(buffer, rootOffset, 12, ''),
               createdAt: DateTime.fromMillisecondsSinceEpoch(
                   const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0)),
-              mentions: const fb.ListReader<String>(
-                      fb.StringReader(asciiOptimization: true),
-                      lazy: false)
-                  .vTableGet(buffer, rootOffset, 16, []));
+              mentions: const fb.ListReader<String>(fb.StringReader(asciiOptimization: true), lazy: false).vTableGet(buffer, rootOffset, 16, []));
 
           return object;
         }),
@@ -383,6 +398,14 @@ class RoomMessage_ {
   /// see [RoomMessage.mentions]
   static final mentions =
       QueryStringVectorProperty<RoomMessage>(_entities[0].properties[6]);
+
+  /// see [RoomMessage.senderName]
+  static final senderName =
+      QueryStringProperty<RoomMessage>(_entities[0].properties[7]);
+
+  /// see [RoomMessage.messageType]
+  static final messageType =
+      QueryStringProperty<RoomMessage>(_entities[0].properties[8]);
 }
 
 /// [RoomModel] entity fields to define ObjectBox queries.

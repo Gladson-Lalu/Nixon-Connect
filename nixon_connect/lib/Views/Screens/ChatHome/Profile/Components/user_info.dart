@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:location/location.dart';
+import 'package:nixon_connect/Services/location_service.dart';
+
+import '../../../../../Cubit/auth/auth_cubit.dart';
+import '../../../../../Models/user_model.dart';
 
 class UserInfo extends StatelessWidget {
   const UserInfo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final UserModel? _user =
+        BlocProvider.of<AuthCubit>(context).user;
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -33,29 +42,59 @@ class UserInfo extends StatelessWidget {
                     children: <Widget>[
                       ...ListTile.divideTiles(
                         color: Colors.grey,
-                        tiles: const [
+                        tiles: [
                           ListTile(
                             contentPadding:
-                                EdgeInsets.symmetric(
+                                const EdgeInsets.symmetric(
                                     horizontal: 12,
                                     vertical: 4),
+                            leading: const Icon(
+                                Icons.my_location),
+                            title: const Text("Location"),
+                            subtitle: FutureBuilder(
+                              future: () async {
+                                final LocationData?
+                                    _location =
+                                    LocationService.instance
+                                        .locationData;
+                                List<
+                                        Placemark>
+                                    _placeMarks =
+                                    await placemarkFromCoordinates(
+                                        _location!
+                                            .latitude!,
+                                        _location
+                                            .longitude!);
+                                return _placeMarks[0];
+                              }()
+                                  .then((value) =>
+                                      value.locality),
+                              builder: (BuildContext
+                                      context,
+                                  AsyncSnapshot snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                      snapshot.data);
+                                } else {
+                                  return const Text(
+                                      "Loading...");
+                                }
+                              },
+                            ),
+                          ),
+                          ListTile(
                             leading:
-                                Icon(Icons.my_location),
-                            title: Text("Location"),
-                            subtitle: Text("Kathmandu"),
+                                const Icon(Icons.email),
+                            title: const Text("Email"),
+                            subtitle: Text(
+                                _user!.email.toString()),
                           ),
-                          ListTile(
-                            leading: Icon(Icons.email),
-                            title: Text("Email"),
-                            subtitle:
-                                Text("sudeptech@gmail.com"),
-                          ),
-                          ListTile(
+                          const ListTile(
                             leading: Icon(Icons.phone),
                             title: Text("Phone"),
-                            subtitle: Text("99--99876-56"),
+                            subtitle: Text("99-99876-56"),
                           ),
-                          ListTile(
+                          const ListTile(
                             leading: Icon(Icons.person),
                             title: Text("About Me"),
                             subtitle: Text(

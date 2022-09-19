@@ -61,7 +61,7 @@ class SocketService {
     //on message-sent
     _socket!.on('message-sent', (data) {
       if (data['success'] == true) {
-        showToast('Message sent');
+        showToast('Message delivered');
       } else {
         showToast('Network error');
       }
@@ -87,6 +87,8 @@ class SocketService {
   //send message
   void sendMessage(
       {required String message,
+      required String messageType,
+      required String senderName,
       required String roomId,
       required List<String> mentions}) {
     _socket!.emit('send-message', {
@@ -94,6 +96,8 @@ class SocketService {
       'message': message,
       'mentions': mentions,
       'roomId': roomId,
+      'messageType': messageType,
+      'senderName': senderName,
     });
   }
 
@@ -105,5 +109,11 @@ class SocketService {
         'longitude': locationData.longitude,
       }
     });
+  }
+
+  //join room
+  void joinRoom(String roomId) {
+    _socket!.emit(
+        'join-room', {'token': token, 'roomId': roomId});
   }
 }

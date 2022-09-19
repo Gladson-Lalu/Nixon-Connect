@@ -6,6 +6,8 @@ class RoomMessage {
   @Index()
   String messageId;
   String message;
+  String senderName;
+  String messageType;
   List<String> mentions;
   String sender;
   String room;
@@ -15,6 +17,8 @@ class RoomMessage {
     this.id = 0,
     required this.messageId,
     required this.message,
+    required this.senderName,
+    required this.messageType,
     required this.sender,
     required this.room,
     required this.createdAt,
@@ -26,6 +30,8 @@ class RoomMessage {
         messageId: json["_id"],
         message: json["messageContent"] ?? '',
         sender: json["messageSender"] ?? '',
+        senderName: json["senderName"] ?? '',
+        messageType: json["messageType"] ?? '',
         room: json["messageRoomId"] ?? '',
         mentions: json["messageMentions"] != null
             ? List<String>.from(json["messageMentions"])

@@ -68,4 +68,29 @@ class RoomService {
       rethrow;
     }
   }
+
+  //update room avatar http post request
+  Future<http.Response> updateRoomAvatar(
+      {required String roomId,
+      required String roomAvatar,
+      required String userToken}) async {
+    try {
+      final response = await http
+          .post(
+            Uri.parse(apiURI! + 'room/update-room-avatar'),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: json.encode({
+              'token': userToken,
+              'roomId': roomId,
+              'roomAvatarUrl': roomAvatar,
+            }),
+          )
+          .timeout(timeout);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
 }

@@ -102,7 +102,7 @@ class ChannelPage extends StatelessWidget {
                           1.2,
                       child: const Center(
                         child: Text(
-                          'No Channels',
+                          'No Invitation Channels',
                           style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold),

@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:location/location.dart';
 import 'package:meta/meta.dart';
+import 'package:nixon_connect/Services/file_service.dart';
+import 'package:nixon_connect/Services/socket_service.dart';
+import 'package:nixon_connect/Services/sync_service.dart';
 import '../../Models/room_model.dart';
 import '../../Services/room_service.dart';
 
@@ -22,6 +26,7 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
       required String roomPassword,
       required String roomPerimeter,
       required String? roomType,
+      required File? roomImage,
       required String userToken}) async {
     {
       final _roomService = RoomService();
@@ -51,7 +56,24 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
           if (response.statusCode == 200) {
             final roomModel = RoomModel.fromJson(
                 json.decode(response.body)['room']);
-            rooms.add(roomModel);
+            if (roomImage != null) {
+              final String roomImageURL = await FileService
+                  .instance
+                  .uploadFile(filePath: roomImage.path);
+              final temp =
+                  await _roomService.updateRoomAvatar(
+                      roomId: roomModel.roomId,
+                      roomAvatar: roomImageURL,
+                      userToken: userToken);
+              if (temp.statusCode == 200) {
+                roomModel.roomAvatar =
+                    jsonDecode(temp.body)['url'];
+              }
+            }
+            SyncServer.instance
+                .syncData(userToken: userToken);
+            SocketService.instance
+                .joinRoom(roomModel.roomId);
             emit(CreateRoomSuccess(roomModel));
           } else {
             emit(const CreateRoomError());

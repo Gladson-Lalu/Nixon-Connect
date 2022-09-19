@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../Common/constant.dart';
 
-AppBar buildAppBar({required String title}) {
+AppBar buildAppBar(
+    {required String title,
+    required isLoading,
+    required loadingProgress}) {
   return AppBar(
     systemOverlayStyle: const SystemUiOverlayStyle(
       statusBarColor: Colors.black,
@@ -41,6 +44,38 @@ AppBar buildAppBar({required String title}) {
                 ),
               ],
             ),
+            const Spacer(),
+            isLoading
+                ? Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Sending...",
+                            style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 12)),
+                      ),
+                      SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(
+                          backgroundColor:
+                              Colors.grey.shade200,
+                          value: loadingProgress,
+                          valueColor:
+                              const AlwaysStoppedAnimation<
+                                  Color>(Colors.blueAccent),
+                          strokeWidth: 3,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                    ],
+                  )
+                : const SizedBox(
+                    width: 8,
+                  ),
           ],
         ),
       ),

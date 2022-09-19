@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:1735908140870699501",
-      "lastPropertyId": "7:7434389742705426507",
+      "lastPropertyId": "9:6751201861564649267",
       "name": "RoomMessage",
       "properties": [
         {
@@ -45,6 +45,16 @@
           "id": "7:7434389742705426507",
           "name": "mentions",
           "type": 30
+        },
+        {
+          "id": "8:820185175347719406",
+          "name": "senderName",
+          "type": 9
+        },
+        {
+          "id": "9:6751201861564649267",
+          "name": "messageType",
+          "type": 9
         }
       ],
       "relations": []

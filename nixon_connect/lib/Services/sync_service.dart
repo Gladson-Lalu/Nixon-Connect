@@ -20,9 +20,6 @@ class SyncServer {
   void syncData({required String userToken}) async {
     final SharedPreferences _prefs =
         await SharedPreferences.getInstance();
-    final String? lastSync =
-        _prefs.getString('last-synced');
-
     final response = await http
         .post(
           Uri.parse(apiURI! + 'sync'),
@@ -30,18 +27,14 @@ class SyncServer {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $userToken',
           },
-          body: jsonEncode({
-            'lastSync':
-                lastSync ?? '2021-01-01T00:00:00.000Z'
-          }),
+          body: jsonEncode(
+              {'lastSync': '2021-01-01T00:00:00.000Z'}),
         )
         .timeout(_timeout);
     if (response.statusCode == 200) {
       _prefs.setString(
           'last-synced', DateTime.now().toIso8601String());
       final json = jsonDecode(response.body);
-      print(
-          "Synced data: ${DateTime.now().toIso8601String()}");
       _localDB.addRooms(json['rooms']);
       _localDB.addMessages(json['messages']);
     } else {

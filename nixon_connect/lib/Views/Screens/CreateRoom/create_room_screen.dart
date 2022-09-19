@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nixon_connect/Views/components/circle_image_picker.dart';
 
 import '../../../Common/constant.dart';
 import '../../../Cubit/auth/auth_cubit.dart';
@@ -26,6 +29,7 @@ class _CreateRoomState extends State<CreateRoom> {
     'Guided',
     'Friendzone'
   ];
+  File? _imageFile;
   String? _chosenValue;
   String _roomName = '';
   String _roomDescription = '';
@@ -63,6 +67,15 @@ class _CreateRoomState extends State<CreateRoom> {
                     CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: _size.height * 0.05),
+                  circleImagePicker(
+                      context: context,
+                      isProfile: false,
+                      imageFile: _imageFile,
+                      onImageChange: (image) {
+                        setState(() {
+                          _imageFile = image;
+                        });
+                      }),
                   RoundedInputField(
                       hintText: "Room Name",
                       textCapitalization:
@@ -89,7 +102,7 @@ class _CreateRoomState extends State<CreateRoom> {
                           onChanged: onChangedPassword)
                       : const SizedBox(),
                   RoundedInputField(
-                      hintText: "Room Perimeter",
+                      hintText: "Room Perimeter (Meters)",
                       textInputType: TextInputType.number,
                       onChanged: onChangedRoomPerimeter),
                   TextFieldContainer(
@@ -145,6 +158,8 @@ class _CreateRoomState extends State<CreateRoom> {
                                                   _roomPerimeter,
                                               roomType:
                                                   _chosenValue,
+                                              roomImage:
+                                                  _imageFile,
                                               userToken:
                                                   _user
                                                       .token)

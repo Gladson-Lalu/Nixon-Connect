@@ -125,10 +125,11 @@ class LocalDatabase {
           .build()
           .findFirst();
       if (room != null) {
-        room.lastMessage = message.message;
         room.lastUpdatedAt = message.createdAt;
+        room.lastMessage = message.messageType == "text"
+            ? message.message
+            : message.messageType;
         _roomBox.put(room);
-        //remove all message where message id is -1
         _messageBox
             .query(RoomMessage_.messageId.equals('-1'))
             .build()
@@ -155,11 +156,11 @@ class LocalDatabase {
             .build()
             .findFirst();
         if (room != null) {
-          room.lastMessage = message['message'];
-          if (room.lastUpdatedAt
-              .isBefore(message['lastUpdatedAt'])) {
-            room.lastUpdatedAt = message['lastUpdatedAt'];
-          }
+          room.lastMessage =
+              message['messageType'] == 'text'
+                  ? message['message']
+                  : message['messageType'];
+          room.lastUpdatedAt = message['lastUpdatedAt'];
           _roomBox.put(room);
           _messageBox.put(RoomMessage.fromJson(message));
         }

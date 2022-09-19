@@ -33,7 +33,7 @@ class ChannelsCubit extends Cubit<ChannelsState> {
     }
     roomModels
         .sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    emit(ChannelsLoaded(roomModels));
+    emit(ChannelsLoaded(List.from(roomModels)));
   }
 
   void initChannels() {
@@ -47,8 +47,7 @@ class ChannelsCubit extends Cubit<ChannelsState> {
   void rejectRoom(RoomModel roomModel) {
     rejectedRooms.add(roomModel.roomId);
     roomModels.remove(roomModel);
-    final List<RoomModel> l2 = List.from(roomModels);
-    emit(ChannelsLoaded(l2));
+    emit(ChannelsLoaded(List.from(roomModels)));
   }
 
   Future<void> fetchChannels(String token) async {

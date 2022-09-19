@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nixon_connect/Views/components/circle_image_picker.dart';
 import '../../../Common/constant.dart';
 import '../../../Cubit/auth/auth_cubit.dart';
 import '../Login/login_screen.dart';
@@ -21,6 +24,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  File? _imageFile;
   String name = '';
   String email = '';
   String password = '';
@@ -39,6 +43,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
               "SIGNUP",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
+            SizedBox(height: size.height * 0.03),
+            circleImagePicker(
+                context: context,
+                imageFile: _imageFile,
+                onImageChange: (image) {
+                  setState(() {
+                    _imageFile = image;
+                  });
+                }),
             SizedBox(height: size.height * 0.03),
             RoundedInputField(
               textInputType: TextInputType.name,
@@ -110,12 +123,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         //register user
                         BlocProvider.of<AuthCubit>(context)
                             .handleRegister(
-                          name: name,
-                          email: email,
-                          password: password,
-                          userID: userID,
-                          confirmPassword: confirmPassword,
-                        );
+                                name: name,
+                                email: email,
+                                password: password,
+                                userID: userID,
+                                confirmPassword:
+                                    confirmPassword,
+                                imageFile: _imageFile);
                       });
                 }
               },

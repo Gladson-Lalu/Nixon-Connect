@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:nixon_connect/Services/file_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Common/validator.dart';
@@ -84,7 +86,8 @@ class AuthCubit extends Cubit<AuthState> {
       required String password,
       required String name,
       required String userID,
-      required String confirmPassword}) async {
+      required String confirmPassword,
+      File? imageFile}) async {
     try {
       emit(const AuthLoading());
       if (validateEmail(email) &&
@@ -100,9 +103,23 @@ class AuthCubit extends Cubit<AuthState> {
           password: password,
         );
         if (response.statusCode == 200) {
+          if (imageFile != null) {
+            final String imageUrl = await FileService
+                .instance
+                .uploadFile(filePath: imageFile.path);
+            final String token =
+                jsonDecode(response.body)['user']['token'];
+            final temp =
+                await _authService.updateProfilePicture(
+                    userToken: token,
+                    profilePicture: imageUrl);
+            user = UserModel.fromJson(
+                json.decode(temp.body)['user']);
+          } else {
+            user = UserModel.fromJson(
+                json.decode(response.body)['user']);
+          }
           showToast("Registration Successful");
-          user = UserModel.fromJson(
-              json.decode(response.body)['user']);
           saveUserData(user: user!);
           initServices();
           emit(AuthSuccess(user: user!));
