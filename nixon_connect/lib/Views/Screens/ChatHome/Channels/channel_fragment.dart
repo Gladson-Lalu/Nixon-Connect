@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nixon_connect/Common/functions.dart';
-import 'package:nixon_connect/Cubit/auth/auth_cubit.dart';
-import 'package:nixon_connect/Cubit/channels/channels_cubit.dart';
-import 'package:nixon_connect/Views/Screens/IndividualChat/conversations_screen.dart';
+import '../../../../Common/functions.dart';
+import '../../../../Cubit/auth/auth_cubit.dart';
+import '../../../../Cubit/channels/channels_cubit.dart';
+import '../../IndividualChat/conversations_screen.dart';
 
 import '../../../../Cubit/join_room/join_room_cubit.dart';
 import '../../../../Models/room_model.dart';

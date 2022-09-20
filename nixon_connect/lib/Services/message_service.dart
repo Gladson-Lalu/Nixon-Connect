@@ -69,7 +69,6 @@ class MessageService {
       final url = await FileService.instance.uploadFile(
         filePath: file.path,
       );
-      print(url);
       sendMessage(
         messageType: messageType,
         senderName:

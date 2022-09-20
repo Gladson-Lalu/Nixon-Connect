@@ -49,7 +49,6 @@ class FileService {
     required String url,
     required String fileName,
   }) async {
-    print('downloading file');
     final dir = await getApplicationDocumentsDirectory();
     final filePath = '${dir.path}/$fileName';
     final file = File(filePath);

@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:location/location.dart';
 import 'package:meta/meta.dart';
-import 'package:nixon_connect/Services/file_service.dart';
-import 'package:nixon_connect/Services/socket_service.dart';
-import 'package:nixon_connect/Services/sync_service.dart';
+import '../../Services/file_service.dart';
+import '../../Services/socket_service.dart';
+import '../../Services/sync_service.dart';
 import '../../Models/room_model.dart';
 import '../../Services/room_service.dart';
 

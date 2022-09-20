@@ -10,7 +10,7 @@ import 'package:socket_io_client/socket_io_client.dart'
 
 //send location to server via socket
 void sendLocation(String token) async {
-  const String socketURI = "http://192.168.1.48:14650";
+  const String socketURI = "http://20.235.83.206:14650/";
   Socket _socket = IO.io(socketURI, <String, dynamic>{
     'transports': ['websocket'],
     'autoConnect': false,
