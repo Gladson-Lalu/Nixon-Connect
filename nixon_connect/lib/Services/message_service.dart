@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nixon_connect/Common/validator.dart';
-import 'package:nixon_connect/Services/socket_service.dart';
-import 'package:nixon_connect/Models/room_message.dart';
+import '../Common/validator.dart';
+import 'socket_service.dart';
+import '../Models/room_message.dart';
 
 import '../Cubit/auth/auth_cubit.dart';
 import '../Handlers/local_database_handler.dart';

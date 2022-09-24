@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:location/location.dart';
-import 'package:nixon_connect/Services/location_service.dart';
+import '../../../../../Services/location_service.dart';
 
 import '../../../../../Cubit/auth/auth_cubit.dart';
 import '../../../../../Models/user_model.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:nixon_connect/Cubit/channels/channels_cubit.dart';
-import 'package:nixon_connect/Cubit/join_room/join_room_cubit.dart';
+import 'Cubit/channels/channels_cubit.dart';
+import 'Cubit/join_room/join_room_cubit.dart';
 import 'Handlers/local_database_handler.dart';
 import 'package:workmanager/workmanager.dart';
 

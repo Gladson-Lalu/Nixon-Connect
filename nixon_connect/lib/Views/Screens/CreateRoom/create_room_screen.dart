@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nixon_connect/Views/components/circle_image_picker.dart';
+import '../../components/circle_image_picker.dart';
 
 import '../../../Common/constant.dart';
 import '../../../Cubit/auth/auth_cubit.dart';

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:nixon_connect/Services/file_service.dart';
+import '../../Services/file_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Common/validator.dart';
