@@ -1,7 +1,7 @@
 class ActiveUserInfo {
-    constructor(userId, socketId, location = { latitude: 0, longitude: 0 }) {
+    constructor(userId, socket, location = { latitude: 0, longitude: 0 }) {
         this.userId = userId;
-        this.socketId = socketId;
+        this.socket = socket;
         this.location = {
             latitude: location.latitude,
             longitude: location.longitude,

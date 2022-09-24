@@ -27,7 +27,8 @@ module.exports.sync = (req, res) => {
 
                         //get room messages
                         const roomIds = rooms.map(room => room._id);
-                        Message.find({ room: { $in: roomIds }, updatedAt: { $gt: lastSyncTimestamp } }).then(messages => {
+                        //get room messages which updated after last sync in sorted order of createdAt
+                        Message.find({ roomId: { $in: roomIds }, createdAt: { $gt: lastSyncTimestamp } }).sort({ createdAt: 1 }).then(messages => {
                             res.status(200).json({ rooms: rooms, messages: messages });
                         }).catch(err => {
                             console.log(err);

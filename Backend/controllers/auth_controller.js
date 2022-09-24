@@ -1,4 +1,4 @@
-const { sign } = require('jsonwebtoken');
+const { sign, verify } = require('jsonwebtoken');
 const User = require('../models/user');
 
 
@@ -105,4 +105,48 @@ const verifyToken = (req, res) => {
     }
 }
 
-module.exports = { createUser, loginUser, verifyToken };
+//update profile picture
+const updateProfilePicture = (req, res) => {
+    const token = req.body.token;
+    if (!token) {
+        res.status(400).json({ error: 'token not found' });
+        return;
+    }
+    try {
+        const decoded = verify(token, process.env.JWT_SECRET);
+        //verify userId
+        User.findById(decoded.id).then((user) => {
+            if (!user) {
+                res.status(400).json({ error: 'user not found' });
+                return;
+            }
+            user.profileUrl = req.body.profilePicture;
+            user.save().then((user) => {
+                res.status(200).json({
+                    authentication: 'success', user: {
+                        id: user._id,
+                        name: user.name,
+                        userID: user.userID,
+                        email: user.email,
+                        profileUrl: user.profileUrl,
+                        chats: user.chats,
+                        lastSeen: user.lastSeen,
+                        token: token,
+                        isActive: user.isActive,
+                    }
+                });
+            }).catch(err => {
+                console.log(err);
+                res.status(500).json({ error: err.message });
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err.message });
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ error: 'token not verified' });
+    }
+}
+
+module.exports = { createUser, loginUser, verifyToken, updateProfilePicture };

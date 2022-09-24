@@ -145,8 +145,58 @@ module.exports.joinRoom = (req, res) => {
                         res.status(200).json({ room: room });
                     }).catch(err => {
                         console.log(err);
+                        //join the socket room
+
                         res.status(500).json({ error: err.message });
                     });
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).json({ error: err.message });
+                });
+            }).catch(err => {
+                console.log(err);
+                res.status(500).json({ error: err.message });
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err.message });
+        });
+    });
+}
+
+//update room avatar
+module.exports.updateRoomAvatar = (req, res) => {
+    const { token, roomId, roomAvatarUrl } = req.body;
+    console.log(req.roomAvatarUrl);
+    //verify token
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            console.log(err.message);
+            res.status(401).json({ error: 'unauthorized' });
+            return;
+        }
+        //get user id from token
+        const userId = decoded.id;
+        //verify user id
+        User.findById(userId).then(user => {
+            if (!user) {
+                res.status(401).json({ error: 'unauthorized' });
+                return;
+            }
+            //verify room
+            Room.findById(roomId).then(room => {
+                if (!room) {
+                    res.status(404).json({ error: 'room not found' });
+                    return;
+                }
+                //verify room host
+                if (room.roomHost.toString() !== userId) {
+                    res.status(401).json({ error: 'unauthorized' });
+                    return;
+                }
+                //update room avatar
+                Room.updateOne({ _id: roomId }, { roomAvatarUrl: roomAvatarUrl }).then(() => {
+                    res.status(200).json({ url: roomAvatarUrl });
                 }).catch(err => {
                     console.log(err);
                     res.status(500).json({ error: err.message });

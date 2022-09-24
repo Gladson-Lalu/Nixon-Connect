@@ -3,6 +3,7 @@ const User = require('../models/user');
 const Message = require('../models/message');
 const { ActiveUserInfo } = require('./active_user_session');
 const InviteRoom = require('../models/inviting_rooms');
+const { CapitalizeFirstLetter } = require('../utils/string_utils');
 const geolib = require('geolib');
 
 const jwt = require('jsonwebtoken');
@@ -52,10 +53,10 @@ class SocketIO {
 
                             //add this user to all socket rooms that he is a member of
                             user.rooms.forEach(room => {
-                                socket.join(room.toString());
+                                socket.join(room._id.toString());
                             });
                             //add this user to the active users hash map
-                            this.activeUsers[token] = new ActiveUserInfo(userId, socket.id);
+                            this.activeUsers[token] = new ActiveUserInfo(userId, socket);
                             //send the active users hash map to the client
                         });
                     });
@@ -66,8 +67,8 @@ class SocketIO {
 
             socket.on('send-message', (data) => {
                 try {
-                    const { token, message, mentions, roomId } = data;
-                    if (token && roomId && message) {
+                    const { token, message, mentions, roomId, messageType, senderName, } = data;
+                    if (token && roomId && message && messageType && senderName) {
                         if (token in this.activeUsers) {
                             const userId = this.activeUsers[token].userId;
                             if (!userId) {
@@ -81,25 +82,34 @@ class SocketIO {
                                     return;
                                 }
                                 if (room.roomMembers.includes(userId)) {
-                                    const newMessage = new Message({
-                                        messageSender: userId,
-                                        messageRoomId: roomId,
-                                        messageContent: message,
-                                        mentions: mentions,
-                                    });
-                                    newMessage.save().then(message => {
-                                        //send message to all users in room
-                                        //Update Room Last Message
-                                        Room.updateOne({ _id: roomId }, { $set: { lastMessage: message.messageContent } }).then(() => {
-                                            io.in(roomId).emit('message-received', message);
-                                            io.to(socket.id).emit('message-sent', { success: true });
+                                    User.findById(userId).then(user => {
+                                        const newMessage = new Message({
+                                            senderName: user.username,
+                                            messageType: messageType,
+                                            senderName: senderName,
+                                            messageSender: userId,
+                                            messageRoomId: roomId,
+                                            messageContent: message,
+                                            mentions: mentions,
+                                        });
+                                        newMessage.save().then(message => {
+                                            //send message to all users in room
+                                            //Update Room Last Message
+                                            const lastMessage = message.messageType === 'text' ? message.messageContent : CapitalizeFirstLetter(message.messageType);
+                                            Room.updateOne({ _id: roomId }, { $set: { lastMessage: lastMessage } }).then(() => {
+                                                io.in(roomId).emit('message-received', message);
+                                                io.to(socket.id).emit('message-sent', { success: true });
+                                            }).catch(err => {
+                                                console.log(err);
+                                                onError(err.message);
+                                            });
                                         }).catch(err => {
                                             console.log(err);
-                                            onError(err.message);
+                                            onError('Failed to save message');
                                         });
                                     }).catch(err => {
                                         console.log(err);
-                                        onError('Failed to save message');
+                                        onError('User not found');
                                     });
                                 } else {
                                     onError('User not in room');
@@ -107,7 +117,8 @@ class SocketIO {
                                 }
                             }).catch(err => {
                                 console.log(err);
-                                onError('Failed to find room');
+                                onError('Failed to find room'
+                                );
                             });
                         } else {
                             onError('token-not-found');
@@ -125,7 +136,7 @@ class SocketIO {
             socket.on('disconnect', () => {
                 //remove this user from the active users hash map
                 for (const token in this.activeUsers) {
-                    if (this.activeUsers[token].socketId === socket.id) {
+                    if (this.activeUsers[token].socket.id === socket.id) {
                         delete this.activeUsers[token];
                     }
                 }
@@ -176,8 +187,48 @@ class SocketIO {
                     console.log(err);
                 }
             });
+            //join room
+            socket.on('join-room', (data) => {
+                try {
+                    const { token, roomId } = data;
+                    if (token && roomId) {
+                        if (token in this.activeUsers) {
+                            const userId = this.activeUsers[token].userId;
+                            if (!userId) {
+                                onError('User not found');
+                                return;
+                            }
+                            Room.findById(roomId).then(room => {
+                                if (!room) {
+                                    onError('Room not found');
+                                    return;
+                                }
+                                if (room.roomMembers.includes(userId)) {
+                                    socket.join(roomId);
+                                    io.to(socket.id).emit('joined-room', { success: true });
+                                } else {
+                                    onError('User not in room');
+                                    return;
+                                }
+                            }).catch(err => {
+                                console.log(err);
+                                onError('Failed to find room');
+                            });
+                        } else {
+                            onError('token-not-found');
+                            return;
+                        }
+                    } else {
+                        onError('Invalid data');
+                        return;
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+            );
         });
-    };
+    }
 
     //get active users hash map
     getActiveUsers() {
@@ -186,9 +237,8 @@ class SocketIO {
 
     //invite users to rooms
     notifyUsers(users, invitingRooms) {
-        console.log(invitingRooms);
         for (const user of users) {
-            this.io.to(user.socketId).emit('room-invite', { rooms: invitingRooms });
+            this.io.to(user.socket.id).emit('room-invite', { rooms: invitingRooms });
         }
     }
 
@@ -203,8 +253,8 @@ class SocketIO {
                     nearestRooms.push(room.room);
                 }
             }
-            //get room details
-            Room.find({ _id: { $in: nearestRooms } }).then(rooms => {
+            //get room details that user is not a member of
+            Room.find({ _id: { $in: nearestRooms } }).then((rooms) => {
                 //send room name, room id, room type, room description, room host, room avatar 
                 const roomDetails = rooms.map(room => {
                     return {
